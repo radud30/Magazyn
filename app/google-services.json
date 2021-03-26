@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "193887326633",
+    "project_id": "magazyn-2deb1",
+    "storage_bucket": "magazyn-2deb1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193887326633:android:fed94b4494b8637871b4b8",
+        "android_client_info": {
+          "package_name": "com.example.magazyn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "193887326633-nrqdsc7lce8jhg0ll7c1om1n3fhbm6o3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuHmx5RwFifE2HPD8MEocNPBYsJccHj9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "193887326633-nrqdsc7lce8jhg0ll7c1om1n3fhbm6o3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
