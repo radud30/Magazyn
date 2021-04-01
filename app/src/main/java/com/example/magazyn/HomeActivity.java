@@ -23,6 +23,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button dodaj;
     private Button stan;
     private Button zbieraj;
+    private Button pracownik;
 
 //    FirebaseAuth mFirebaseAuth;
 //    private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -43,6 +44,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         zbieraj = (Button) findViewById(R.id.button_zbieraj);
         zbieraj.setOnClickListener(this);
+
+        pracownik = (Button) findViewById(R.id.button_pracownik);
+        pracownik.setOnClickListener(this);
     }
 
     @Override
@@ -72,6 +76,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 verifyPermission();
+            case R.id.button_pracownik:
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
+                mLastClickTime = SystemClock.elapsedRealtime();
+                startActivity(new Intent(HomeActivity.this, PracownikActivity.class));
         }
     }
 

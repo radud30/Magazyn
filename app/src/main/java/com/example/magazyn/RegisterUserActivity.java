@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class RegisterUserActivity extends AppCompatActivity implements View.OnClickListener{
     private long mLastClickTime = 0;
 
-    private TextView registerUser;
+    private Button registerUser;
     private EditText editTextImie, editTextWiek, editTextEmail, editTextHaslo, editTextPowtorzHaslo;
     private ProgressBar progressBar;
 
@@ -94,7 +94,7 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
             return;
         }
         if (haslo.length() < 6){
-            editTextHaslo.setError("Hasło musi mieć 6 zanków");
+            editTextHaslo.setError("Hasło musi mieć co najmniej 6 zanków");
             editTextHaslo.requestFocus();
             return;
         }

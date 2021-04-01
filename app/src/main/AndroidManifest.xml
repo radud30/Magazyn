@@ -14,16 +14,40 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Magazyn">
-        <activity android:name=".ZbierajActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".EdytujSkanowanieActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ProduktDetailsActivity" android:screenOrientation="portrait" />
-        <activity android:name=".StanActivity" android:screenOrientation="portrait" />
-        <activity android:name=".DodajSkanowanieActivity" android:screenOrientation="portrait" />
-        <activity android:name=".DodajActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ForgotPasswordActivity" android:screenOrientation="portrait" />
-        <activity android:name=".RegisterUserActivity" android:screenOrientation="portrait" />
-        <activity android:name=".HomeActivity" android:screenOrientation="portrait" />
-        <activity android:name=".MainActivity" android:screenOrientation="portrait" >
+        <activity android:name=".DodajPracownikaActivity"></activity>
+        <activity
+            android:name=".PracownikActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ZbierajActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EdytujSkanowanieActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProduktDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".StanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DodajSkanowanieActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DodajActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisterUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
