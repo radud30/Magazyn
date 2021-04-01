@@ -32,13 +32,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        btnLogout = (Button) findViewById(R.id.logout);
+        btnLogout = (Button) findViewById(R.id.button_logout);
         btnLogout.setOnClickListener(this);
 
-        dodaj = (Button) findViewById(R.id.button2);
+        dodaj = (Button) findViewById(R.id.button_dodaj);
         dodaj.setOnClickListener(this);
 
-        stan = (Button) findViewById(R.id.button4);
+        stan = (Button) findViewById(R.id.button_sprawdz);
         stan.setOnClickListener(this);
 
         zbieraj = (Button) findViewById(R.id.button_zbieraj);
@@ -48,7 +48,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.logout:
+            case R.id.button_logout:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 FirebaseAuth.getInstance().signOut();
@@ -58,12 +58,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intToMain);
                 finish();
                 break;
-            case R.id.button2:
+            case R.id.button_dodaj:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(HomeActivity.this, Dodaj.class));
+                startActivity(new Intent(HomeActivity.this, DodajActivity.class));
                 break;
-            case R.id.button4:
+            case R.id.button_sprawdz:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(HomeActivity.this, StanActivity.class));

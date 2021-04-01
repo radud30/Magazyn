@@ -20,7 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class RegisterUser extends AppCompatActivity implements View.OnClickListener{
+public class RegisterUserActivity extends AppCompatActivity implements View.OnClickListener{
     private long mLastClickTime = 0;
 
     private TextView registerUser;
@@ -36,14 +36,14 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
         mAuth = FirebaseAuth.getInstance();
 
-        registerUser = (Button) findViewById(R.id.buttonZarejestruj);
+        registerUser = (Button) findViewById(R.id.button_zarejestruj);
         registerUser.setOnClickListener(this);
 
-        editTextImie = (EditText) findViewById(R.id.editTextTextPersonName);
-        editTextWiek = (EditText) findViewById(R.id.editTextNumber);
-        editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddress2);
-        editTextHaslo = (EditText) findViewById(R.id.editTextTextPassword2);
-        editTextPowtorzHaslo = (EditText) findViewById(R.id.editTextTextPassword);
+        editTextImie = (EditText) findViewById(R.id.editTextTextPersonName_name);
+        editTextWiek = (EditText) findViewById(R.id.editTextNumber_age);
+        editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddress2_mail);
+        editTextHaslo = (EditText) findViewById(R.id.editTextTextPassword2_pass);
+        editTextPowtorzHaslo = (EditText) findViewById(R.id.editTextTextPassword_re);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -52,7 +52,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.buttonZarejestruj:
+            case R.id.button_zarejestruj:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 registerUser();
@@ -120,7 +120,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                                 public void onComplete(@NonNull Task<Void> task) {
 
                                     if (task.isSuccessful()){
-                                        Toast.makeText(RegisterUser.this, "Zarejestrowano użytkownika", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterUserActivity.this, "Zarejestrowano użytkownika", Toast.LENGTH_SHORT).show();
                                         progressBar.setVisibility(View.GONE);
                                         editTextEmail.setText("");
                                         editTextHaslo.setText("");
@@ -128,17 +128,17 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                                         editTextPowtorzHaslo.setText("");
                                         editTextWiek.setText("");
 
-                                        startActivity(new Intent(RegisterUser.this, MainActivity.class));
+                                        startActivity(new Intent(RegisterUserActivity.this, MainActivity.class));
                                     }
                                     else{
-                                        Toast.makeText(RegisterUser.this, "Niepowodzenie w zakładaniu konto", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterUserActivity.this, "Niepowodzenie w zakładaniu konto", Toast.LENGTH_SHORT).show();
                                         progressBar.setVisibility(View.GONE);
                                     }
                                 }
                             });
                         }
                         else{
-                            Toast.makeText(RegisterUser.this, "Niepowodzenie w zakładaniu konto", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterUserActivity.this, "Niepowodzenie w zakładaniu konto", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }

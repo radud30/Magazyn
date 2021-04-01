@@ -41,6 +41,13 @@ public class ZbierajActivity extends AppCompatActivity implements ZXingScannerVi
         alert.setTitle("Czy zebrać produkt o kodzie:");
         String kodProduktu = result.getText();
         alert.setMessage(kodProduktu);
+        //kliknięcie poza alert dialog
+        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                ScannerView.resumeCameraPreview(ZbierajActivity.this::handleResult);
+            }
+        });
         alert.setPositiveButton("TAK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

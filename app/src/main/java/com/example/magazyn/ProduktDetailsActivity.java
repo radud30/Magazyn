@@ -53,7 +53,7 @@ public class ProduktDetailsActivity extends AppCompatActivity {
 
         uaktualnijProdukt = (Button) findViewById(R.id.button_update);
         usunProdukt = (Button) findViewById(R.id.button_usun);
-        aparat = (ImageButton) findViewById(R.id.imageButton2);
+        aparat = (ImageButton) findViewById(R.id.imageButton2_camera);
 
         uaktualnijProdukt.setOnClickListener(new View.OnClickListener() {
             @Override

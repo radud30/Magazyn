@@ -1,18 +1,15 @@
 package com.example.magazyn;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,19 +17,16 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import java.util.List;
 
-public class Dodaj extends AppCompatActivity implements View.OnClickListener{
+public class DodajActivity extends AppCompatActivity implements View.OnClickListener{
     public static final int CAMERA_REQUEST_CODE = 10;
     private long mLastClickTime = 0;
 
@@ -55,15 +49,15 @@ public class Dodaj extends AppCompatActivity implements View.OnClickListener{
 
         databaseProdukty = FirebaseDatabase.getInstance().getReference("Produkty");
 
-        nazwaProduktu = (EditText) findViewById(R.id.editTextTextPersonName2);
-        iloscProduktu = (EditText) findViewById(R.id.editTextNumber2);
-        kodProduktu = (EditText) findViewById(R.id.editTextNumber3);
+        nazwaProduktu = (EditText) findViewById(R.id.editTextTextPersonName_nazwapr);
+        iloscProduktu = (EditText) findViewById(R.id.editTextNumber2_ilosc);
+        kodProduktu = (EditText) findViewById(R.id.editText_kodpr);
 
 
-        dodajProdukt = (Button) findViewById(R.id.button3);
+        dodajProdukt = (Button) findViewById(R.id.button_dodajprod);
         dodajProdukt.setOnClickListener(this);
 
-        aparat = (ImageButton) findViewById(R.id.imageButton);
+        aparat = (ImageButton) findViewById(R.id.imageButton_camera);
         aparat.setOnClickListener(this);
 
 
@@ -72,12 +66,12 @@ public class Dodaj extends AppCompatActivity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button3:
+            case R.id.button_dodajprod:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 dodajProd();
                 break;
-            case R.id.imageButton:
+            case R.id.imageButton_camera:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 skanuj();
@@ -127,7 +121,7 @@ public class Dodaj extends AppCompatActivity implements View.OnClickListener{
                         int intIloscFb = Integer.parseInt(iloscFb);
                         intIloscFb = intIloscFb + intIlosc;
                         kodSnapshot.getRef().child("ilosc").setValue(intIloscFb+"");
-                        Toast.makeText(Dodaj.this, "Dodano "+ intIlosc +" produkt/ów o kodzie: " +"'" + kod + "'",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DodajActivity.this, "Dodano "+ intIlosc +" produkt/ów o kodzie: " +"'" + kod + "'",Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
@@ -143,7 +137,7 @@ public class Dodaj extends AppCompatActivity implements View.OnClickListener{
 
                         @Override
                         public void DataIsInserted() {
-                            Toast.makeText(Dodaj.this,"Nowy produkt dodano",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DodajActivity.this,"Nowy produkt dodano",Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -181,7 +175,7 @@ public class Dodaj extends AppCompatActivity implements View.OnClickListener{
         if(ContextCompat.checkSelfPermission(this.getApplicationContext(),permissions[0]) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,permissions,CAMERA_REQUEST_CODE);
         }else {
-            startActivity(new Intent(this, DodajSkanowanie.class));
+            startActivity(new Intent(this, DodajSkanowanieActivity.class));
         }
     }
 
@@ -190,7 +184,7 @@ public class Dodaj extends AppCompatActivity implements View.OnClickListener{
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == CAMERA_REQUEST_CODE){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                startActivity(new Intent(this, DodajSkanowanie.class));
+                startActivity(new Intent(this, DodajSkanowanieActivity.class));
             }else{
                 Toast.makeText(this,"Skanowanie wymaga dostępu do kamery",Toast.LENGTH_SHORT).show();
             }
