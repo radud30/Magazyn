@@ -9,8 +9,7 @@ import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class DodajSkanowanieActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
-
+public class EditScanningActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler{
 
     ZXingScannerView ScannerView;
 
@@ -21,13 +20,10 @@ public class DodajSkanowanieActivity extends AppCompatActivity implements ZXingS
         setContentView(ScannerView);
     }
 
-
     @Override
     public void handleResult(Result result) {
-
-        DodajActivity.kodProduktu.setText(result.getText());
+        ProductDetailsActivity.editTextProductBarcode.setText(result.getText());
         onBackPressed();
-
     }
 
     @Override

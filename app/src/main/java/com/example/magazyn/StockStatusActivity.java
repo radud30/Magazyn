@@ -8,19 +8,19 @@ import android.view.View;
 
 import java.util.List;
 
-public class StanActivity extends AppCompatActivity {
+public class StockStatusActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stan);
+        setContentView(R.layout.activity_stock_status);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_produkty);
-        new FirebaseDatabaseHelper().readProdukty(new FirebaseDatabaseHelper.DataStatus() {
+        new FirebaseDatabaseHelper().readProducts(new FirebaseDatabaseHelper.DataStatus() {
             @Override
-            public void DataIsLoaded(List<Produkty> produktyList, List<String> keys) {
+            public void DataIsLoaded(List<Products> productsList, List<String> keys) {
                 findViewById(R.id.progressBar3).setVisibility(View.GONE);
-                new RecycleViewConfig().setConfig(mRecyclerView,StanActivity.this, produktyList,keys);
+                new RecycleViewConfig().setConfig(mRecyclerView, StockStatusActivity.this, productsList,keys);
             }
 
             @Override

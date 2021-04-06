@@ -15,15 +15,20 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int CAMERA_REQUEST_CODE = 10;
     private long mLastClickTime = 0;
-    private Button btnLogout;
-    private Button dodaj;
-    private Button stan;
-    private Button zbieraj;
-    private Button pracownik;
+    private Button buttonLogout, buttonAdd, buttonStockStatus, buttonCollect, buttonWorker;
+    private DatabaseReference mReferenceWorker;
+    private Query queryWorker;
+    private String workerFb, creatorUid;
 
 //    FirebaseAuth mFirebaseAuth;
 //    private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -33,20 +38,41 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        btnLogout = (Button) findViewById(R.id.button_logout);
-        btnLogout.setOnClickListener(this);
+        buttonLogout = (Button) findViewById(R.id.button_logout);
+        buttonLogout.setOnClickListener(this);
 
-        dodaj = (Button) findViewById(R.id.button_dodaj);
-        dodaj.setOnClickListener(this);
+        buttonAdd = (Button) findViewById(R.id.button_dodaj);
+        buttonAdd.setOnClickListener(this);
 
-        stan = (Button) findViewById(R.id.button_sprawdz);
-        stan.setOnClickListener(this);
+        buttonStockStatus = (Button) findViewById(R.id.button_sprawdz);
+        buttonStockStatus.setOnClickListener(this);
 
-        zbieraj = (Button) findViewById(R.id.button_zbieraj);
-        zbieraj.setOnClickListener(this);
+        buttonCollect = (Button) findViewById(R.id.button_zbieraj);
+        buttonCollect.setOnClickListener(this);
 
-        pracownik = (Button) findViewById(R.id.button_pracownik);
-        pracownik.setOnClickListener(this);
+        buttonWorker = (Button) findViewById(R.id.button_pracownik);
+        buttonWorker.setOnClickListener(this);
+
+        mReferenceWorker = FirebaseDatabase.getInstance().getReference("Workers");
+        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        queryWorker = mReferenceWorker.child(currentUser);
+        queryWorker.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    workerFb = snapshot.child("worker").getValue().toString();
+                    creatorUid = snapshot.child("creatorUid").getValue().toString();
+                    //Log.d("MyTag", isWorker);
+                    //Log.d("MyTag", creator_uid);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
@@ -65,12 +91,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_dodaj:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(HomeActivity.this, DodajActivity.class));
+                startActivity(new Intent(HomeActivity.this, AddProductActivity.class));
                 break;
             case R.id.button_sprawdz:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(HomeActivity.this, StanActivity.class));
+                if(workerFb != null && workerFb.equals("true")){
+                    //Log.d("MyTag", "tu przehcodzimy do stanu praownika");
+                }
+                else {
+                    startActivity(new Intent(HomeActivity.this, StockStatusActivity.class));
+                }
+
                 break;
             case R.id.button_zbieraj:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
@@ -79,7 +111,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_pracownik:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(HomeActivity.this, PracownikActivity.class));
+                startActivity(new Intent(HomeActivity.this, WorkerActivity.class));
+                break;
         }
     }
 
@@ -88,7 +121,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if(ContextCompat.checkSelfPermission(this.getApplicationContext(),permissions[0]) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,permissions,CAMERA_REQUEST_CODE);
         }else {
-            startActivity(new Intent(HomeActivity.this, ZbierajActivity.class));
+            startActivity(new Intent(HomeActivity.this, CollectActivity.class));
         }
     }
 
@@ -97,7 +130,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == CAMERA_REQUEST_CODE){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                startActivity(new Intent(HomeActivity.this, ZbierajActivity.class));
+                startActivity(new Intent(HomeActivity.this, CollectActivity.class));
             }else{
                 Toast.makeText(this,"Skanowanie wymaga dostępu do kamery",Toast.LENGTH_SHORT).show();
             }

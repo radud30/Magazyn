@@ -14,27 +14,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Magazyn">
-        <activity android:name=".DodajPracownikaActivity"></activity>
+        <activity android:name=".AddWorkerActivity"></activity>
         <activity
-            android:name=".PracownikActivity"
+            android:name=".WorkerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ZbierajActivity"
+            android:name=".CollectActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EdytujSkanowanieActivity"
+            android:name=".EditScanningActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProduktDetailsActivity"
+            android:name=".ProductDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".StanActivity"
+            android:name=".StockStatusActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DodajSkanowanieActivity"
+            android:name=".AddScanningActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DodajActivity"
+            android:name=".AddProductActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ForgotPasswordActivity"

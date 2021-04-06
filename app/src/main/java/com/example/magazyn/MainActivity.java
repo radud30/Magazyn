@@ -23,10 +23,9 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private long mLastClickTime = 0;
 
-    private TextView register, forgotPassword;
-    private EditText editTextEmail, editTextHaslo;
-    private Button zaloguj;
-
+    private TextView textViewRegister, textViewForgotPassword;
+    private EditText editTextEmail, editTextPassword;
+    private Button buttonLogin;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
 
@@ -35,21 +34,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        register = (TextView) findViewById(R.id.textView_rej);
-        register.setOnClickListener(this);
+        textViewRegister = (TextView) findViewById(R.id.textView_rej);
+        textViewRegister.setOnClickListener(this);
 
-        zaloguj = (Button) findViewById(R.id.button_login);
-        zaloguj.setOnClickListener(this);
+        buttonLogin = (Button) findViewById(R.id.button_login);
+        buttonLogin.setOnClickListener(this);
 
         editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddress2_mail);
-        editTextHaslo = (EditText) findViewById(R.id.editTextTextPassword2_pass);
+        editTextPassword = (EditText) findViewById(R.id.editTextTextPassword2_pass);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         mAuth = FirebaseAuth.getInstance();
 
-        forgotPassword = (TextView) findViewById(R.id.textView_forgotpass);
-        forgotPassword.setOnClickListener(this);
+        textViewForgotPassword = (TextView) findViewById(R.id.textView_forgotpass);
+        textViewForgotPassword.setOnClickListener(this);
     }
 
     @Override
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void userLogin() {
         String email = editTextEmail.getText().toString().trim();
-        String haslo = editTextHaslo.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
 
         if (email.isEmpty()){
             editTextEmail.setError("Email jest wymagany");
@@ -88,19 +87,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if(haslo.isEmpty()){
-            editTextHaslo.setError("Podaj hasło");
-            editTextHaslo.requestFocus();
+        if(password.isEmpty()){
+            editTextPassword.setError("Podaj hasło");
+            editTextPassword.requestFocus();
             return;
         }
-        if (haslo.length() < 6){
-            editTextHaslo.setError("Hasło jest za krótkie");
-            editTextHaslo.requestFocus();
+        if (password.length() < 6){
+            editTextPassword.setError("Hasło jest za krótkie");
+            editTextPassword.requestFocus();
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
 
-        mAuth.signInWithEmailAndPassword(email,haslo).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
@@ -109,12 +108,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(new Intent(MainActivity.this, HomeActivity.class));
                         progressBar.setVisibility(View.GONE);
                         editTextEmail.setText("");
-                        editTextHaslo.setText("");
+                        editTextPassword.setText("");
                     }
                     else{
                         user.sendEmailVerification();
                         editTextEmail.setText("");
-                        editTextHaslo.setText("");
+                        editTextPassword.setText("");
                         Toast.makeText(MainActivity.this, "Sprawdz swój email aby zweryfikować konto!", Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                     }

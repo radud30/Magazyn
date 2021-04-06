@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,10 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 public class RegisterUserActivity extends AppCompatActivity implements View.OnClickListener{
     private long mLastClickTime = 0;
 
-    private Button registerUser;
-    private EditText editTextImie, editTextWiek, editTextEmail, editTextHaslo, editTextPowtorzHaslo;
+    private Button ButtonRegisterUser;
+    private EditText editTextName, editTextAge, editTextEmail, editTextPassword, editTextRepeatPassword;
     private ProgressBar progressBar;
-
     private FirebaseAuth mAuth;
 
     @Override
@@ -36,14 +34,14 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
 
         mAuth = FirebaseAuth.getInstance();
 
-        registerUser = (Button) findViewById(R.id.button_zarejestruj);
-        registerUser.setOnClickListener(this);
+        ButtonRegisterUser = (Button) findViewById(R.id.button_zarejestruj);
+        ButtonRegisterUser.setOnClickListener(this);
 
-        editTextImie = (EditText) findViewById(R.id.editTextTextPersonName_name);
-        editTextWiek = (EditText) findViewById(R.id.editTextNumber_age);
+        editTextName = (EditText) findViewById(R.id.editTextTextPersonName_name);
+        editTextAge = (EditText) findViewById(R.id.editTextNumber_age);
         editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddress2_mail);
-        editTextHaslo = (EditText) findViewById(R.id.editTextTextPassword2_pass);
-        editTextPowtorzHaslo = (EditText) findViewById(R.id.editTextTextPassword_re);
+        editTextPassword = (EditText) findViewById(R.id.editTextTextPassword2_pass);
+        editTextRepeatPassword = (EditText) findViewById(R.id.editTextTextPassword_re);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -62,20 +60,20 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
 
     private void registerUser() {
         String email = editTextEmail.getText().toString().trim();
-        String haslo = editTextHaslo.getText().toString().trim();
-        String imie = editTextImie.getText().toString().trim();
-        String wiek = editTextWiek.getText().toString().trim();
-        String powtorzhaslo = editTextPowtorzHaslo.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+        String name = editTextName.getText().toString().trim();
+        String age = editTextAge.getText().toString().trim();
+        String repeatPassword = editTextRepeatPassword.getText().toString().trim();
 
-        if (imie.isEmpty()){
-            editTextImie.setError("Imię jest wymagane");
-            editTextImie.requestFocus();
+        if (name.isEmpty()){
+            editTextName.setError("Imię jest wymagane");
+            editTextName.requestFocus();
             return;
         }
 
-        if (wiek.isEmpty()){
-            editTextWiek.setError("Wiek jest wymagany");
-            editTextWiek.requestFocus();
+        if (age.isEmpty()){
+            editTextAge.setError("Wiek jest wymagany");
+            editTextAge.requestFocus();
             return;
         }
         if (email.isEmpty()){
@@ -88,30 +86,30 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
             editTextEmail.requestFocus();
             return;
         }
-        if (haslo.isEmpty()){
-            editTextHaslo.setError("Hasło jest wymagane");
-            editTextHaslo.requestFocus();
+        if (password.isEmpty()){
+            editTextPassword.setError("Hasło jest wymagane");
+            editTextPassword.requestFocus();
             return;
         }
-        if (haslo.length() < 6){
-            editTextHaslo.setError("Hasło musi mieć co najmniej 6 zanków");
-            editTextHaslo.requestFocus();
+        if (password.length() < 6){
+            editTextPassword.setError("Hasło musi mieć co najmniej 6 zanków");
+            editTextPassword.requestFocus();
             return;
         }
-        if (!haslo.equals(powtorzhaslo)){
-            editTextPowtorzHaslo.setError("Hasła nie są identyczne");
-            editTextPowtorzHaslo.requestFocus();
+        if (!password.equals(repeatPassword)){
+            editTextRepeatPassword.setError("Hasła nie są identyczne");
+            editTextRepeatPassword.requestFocus();
             return;
         }
 
         progressBar.setVisibility(View.VISIBLE);
-        mAuth.createUserWithEmailAndPassword(email,haslo)
+        mAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (task.isSuccessful()) {
-                            User user = new User(imie, wiek, email);
+                            User user = new User(name, age, email);
 
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -123,10 +121,10 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
                                         Toast.makeText(RegisterUserActivity.this, "Zarejestrowano użytkownika", Toast.LENGTH_SHORT).show();
                                         progressBar.setVisibility(View.GONE);
                                         editTextEmail.setText("");
-                                        editTextHaslo.setText("");
-                                        editTextImie.setText("");
-                                        editTextPowtorzHaslo.setText("");
-                                        editTextWiek.setText("");
+                                        editTextPassword.setText("");
+                                        editTextName.setText("");
+                                        editTextRepeatPassword.setText("");
+                                        editTextAge.setText("");
 
                                         startActivity(new Intent(RegisterUserActivity.this, MainActivity.class));
                                     }

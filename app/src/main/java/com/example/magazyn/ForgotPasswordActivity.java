@@ -19,24 +19,23 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ForgotPasswordActivity extends AppCompatActivity {
     private long mLastClickTime = 0;
 
-    private EditText emailEditText;
-    private Button resetPasswordButton;
+    private EditText editTextEmail;
+    private Button buttonResetPassword;
     private ProgressBar progressBar;
-
-    private FirebaseAuth auth;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
-        emailEditText = (EditText) findViewById(R.id.editTextTextEmailAddress_resmail);
-        resetPasswordButton = (Button) findViewById(R.id.button_respass);
+        editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddress_resmail);
+        buttonResetPassword = (Button) findViewById(R.id.button_respass);
         progressBar = (ProgressBar) findViewById(R.id.progressBar2);
 
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
-        resetPasswordButton.setOnClickListener(new View.OnClickListener() {
+        buttonResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
@@ -47,26 +46,26 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
     private void resetPassword(){
-        String email = emailEditText.getText().toString().trim();
+        String email = editTextEmail.getText().toString().trim();
 
         if(email.isEmpty()){
-            emailEditText.setError("Email jes wymagany");
-            emailEditText.requestFocus();
+            editTextEmail.setError("Email jes wymagany");
+            editTextEmail.requestFocus();
             return;
         }
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            emailEditText.setError("Podaj poprawny email");
-            emailEditText.requestFocus();
+            editTextEmail.setError("Podaj poprawny email");
+            editTextEmail.requestFocus();
             return;
         }
 
         progressBar.setVisibility(View.VISIBLE);
-        auth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    emailEditText.setText("");
+                    editTextEmail.setText("");
                     Toast.makeText(ForgotPasswordActivity.this, "Sprawdź swój email aby zresetować hasło!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }

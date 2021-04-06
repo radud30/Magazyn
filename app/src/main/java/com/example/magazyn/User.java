@@ -1,17 +1,17 @@
 package com.example.magazyn;
 
 public class User {
-    public String imie;
-    public String wiek;
+    public String name;
+    public String age;
     public String email;
 
     public User(){
 
     }
 
-    public User(String imie, String wiek, String email){
-        this.imie = imie;
-        this.wiek = wiek;
+    public User(String name, String age, String email){
+        this.name = name;
+        this.age = age;
         this.email = email;
     }
 }

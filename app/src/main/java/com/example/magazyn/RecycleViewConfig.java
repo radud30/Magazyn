@@ -17,27 +17,24 @@ import java.util.List;
 public class RecycleViewConfig {
     private long mLastClickTime = 0;
     private Context mContext;
-    private ProduktyAdapter mProduktyAdapter;
+    private ProductAdapter mProductAdapter;
 
-    public void setConfig(RecyclerView recyclerView, Context context, List<Produkty> produktyList, List<String> keys){
+    public void setConfig(RecyclerView recyclerView, Context context, List<Products> productsList, List<String> keys){
         mContext = context;
-        mProduktyAdapter = new ProduktyAdapter(produktyList,keys);
+        mProductAdapter = new ProductAdapter(productsList,keys);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(mProduktyAdapter);
+        recyclerView.setAdapter(mProductAdapter);
     }
 
     class ProduktyItemView extends RecyclerView.ViewHolder{
-        private TextView mKod;
-        private TextView mNazwa;
-        private TextView mIlosc;
-
+        private TextView textViewBarcode, textViewName, textViewQuantity;
         private String key;
 
         public ProduktyItemView(ViewGroup parent){
-            super(LayoutInflater.from(mContext).inflate(R.layout.produkty_list_item,parent,false));
-            mKod = (TextView) itemView.findViewById(R.id.textView_kod);
-            mNazwa = (TextView) itemView.findViewById(R.id.textView_nazwa);
-            mIlosc = (TextView) itemView.findViewById(R.id.textView_ilosc);
+            super(LayoutInflater.from(mContext).inflate(R.layout.product_list_item,parent,false));
+            textViewBarcode = (TextView) itemView.findViewById(R.id.textView_kod);
+            textViewName = (TextView) itemView.findViewById(R.id.textView_nazwa);
+            textViewQuantity = (TextView) itemView.findViewById(R.id.textView_ilosc);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -45,30 +42,30 @@ public class RecycleViewConfig {
                     if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                     mLastClickTime = SystemClock.elapsedRealtime();
 
-                    Intent intent = new Intent(mContext, ProduktDetailsActivity.class);
+                    Intent intent = new Intent(mContext, ProductDetailsActivity.class);
                     intent.putExtra("key",key);
-                    intent.putExtra("kod",mKod.getText().toString());
-                    intent.putExtra("nazwa",mNazwa.getText().toString());
-                    intent.putExtra("ilosc", mIlosc.getText().toString());
+                    intent.putExtra("barcode", textViewBarcode.getText().toString());
+                    intent.putExtra("name", textViewName.getText().toString());
+                    intent.putExtra("quantity", textViewQuantity.getText().toString());
 
                     mContext.startActivity(intent);
                 }
             });
         }
-        public void bind(Produkty produkty, String key){
-            mKod.setText(produkty.getKod());
-            mNazwa.setText(produkty.getProduktNazwa());
-            mIlosc.setText(produkty.getIlosc());
+        public void bind(Products products, String key){
+            textViewBarcode.setText(products.getBarcode());
+            textViewName.setText(products.getProductName());
+            textViewQuantity.setText(products.getQuantity());
             this.key = key;
 
         }
     }
-    class ProduktyAdapter extends RecyclerView.Adapter<ProduktyItemView>{
-        private List<Produkty> mProduktyList;
+    class ProductAdapter extends RecyclerView.Adapter<ProduktyItemView>{
+        private List<Products> mProductsList;
         private List<String> mKeys;
 
-        public ProduktyAdapter(List<Produkty> mProduktyList, List<String> mKeys) {
-            this.mProduktyList = mProduktyList;
+        public ProductAdapter(List<Products> mProductsList, List<String> mKeys) {
+            this.mProductsList = mProductsList;
             this.mKeys = mKeys;
         }
 
@@ -80,12 +77,12 @@ public class RecycleViewConfig {
 
         @Override
         public void onBindViewHolder(@NonNull ProduktyItemView holder, int position) {
-            holder.bind(mProduktyList.get(position), mKeys.get(position));
+            holder.bind(mProductsList.get(position), mKeys.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return mProduktyList.size();
+            return mProductsList.size();
         }
     }
 }

@@ -8,19 +8,17 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-public class PracownikActivity extends AppCompatActivity implements View.OnClickListener{
+public class WorkerActivity extends AppCompatActivity implements View.OnClickListener{
     private long mLastClickTime = 0;
-    private Button dodajPrac;
+    private Button buttonAddWorker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pracownik);
+        setContentView(R.layout.activity_worker);
 
-        dodajPrac = (Button) findViewById(R.id.button_dodajprac);
-        dodajPrac.setOnClickListener(this);
+        buttonAddWorker = (Button) findViewById(R.id.button_dodajprac);
+        buttonAddWorker.setOnClickListener(this);
     }
 
     @Override
@@ -29,7 +27,7 @@ public class PracownikActivity extends AppCompatActivity implements View.OnClick
             case R.id.button_dodajprac:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(PracownikActivity.this, DodajPracownikaActivity.class));
+                startActivity(new Intent(WorkerActivity.this, AddWorkerActivity.class));
                 break;
         }
     }
