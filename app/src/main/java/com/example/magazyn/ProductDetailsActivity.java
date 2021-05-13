@@ -19,7 +19,15 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ProductDetailsActivity extends AppCompatActivity {
@@ -30,8 +38,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
     public static EditText editTextProductBarcode;
     private Button buttonUpdate, buttonDelete;
     private ImageButton imageButtonCamera;
-
-    private String key, barcode, name, quantity;
+    private DatabaseReference databaseRefUsers, databaseRefActivity, databaseRefWorkers;
+    private Query queryUser, queryWorker;
+    private  Activity activity;
+    private String key, barcode, name, quantity, currentUser, userEmailFb, workerFb, workerEmailFb, creatorUid;
 
 
     @Override
@@ -54,6 +64,44 @@ public class ProductDetailsActivity extends AppCompatActivity {
         buttonUpdate = (Button) findViewById(R.id.button_update);
         buttonDelete = (Button) findViewById(R.id.button_usun);
         imageButtonCamera = (ImageButton) findViewById(R.id.imageButton2_camera);
+
+        databaseRefUsers = FirebaseDatabase.getInstance().getReference("Users");
+        databaseRefActivity = FirebaseDatabase.getInstance().getReference("Activity");
+        databaseRefWorkers = FirebaseDatabase.getInstance().getReference("Workers");
+
+        currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        queryUser = databaseRefUsers.child(currentUser);
+        queryUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    userEmailFb = snapshot.child("email").getValue().toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        queryWorker = databaseRefWorkers.child(currentUser);
+        queryWorker.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    workerFb = snapshot.child("worker").getValue().toString();
+                    creatorUid = snapshot.child("creatorUid").getValue().toString();
+                    workerEmailFb = snapshot.child("email").getValue().toString();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,13 +127,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 int intQuantity = Integer.parseInt(quantity);
                 //String finalIlosc = String.valueOf(intQuantity);
 
-                if(intQuantity == 0){
-                    editTextProductQuantity.setError("Musisz podać liczbę większą od 0");
+                if(intQuantity < 0){
+                    editTextProductQuantity.setError("Musisz podać liczbę nie mnijeszą niż 0");
                     editTextProductQuantity.requestFocus();
                     return;
                 }
 
+                rejestrActivityUpdate();
                 updateProduct();
+
             }
         });
 
@@ -101,7 +151,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 alert.setPositiveButton("TAK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        rejestrActivityDelete();
                         deleteProduct();
+
                     }
                 });
                 alert.setNegativeButton("NIE", new DialogInterface.OnClickListener() {
@@ -138,8 +190,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
         products.setBarcode(editTextProductBarcode.getText().toString().trim());
         products.setProductName(editTextProductName.getText().toString().trim());
         products.setQuantity(finalQuantity);
-        products.setUserUid(currentUser);
-        products.setUserUidBarcode(currentUser + editTextProductBarcode.getText().toString().trim());
+        if(workerFb != null && workerFb.equals("true")){
+            products.setUserUid(creatorUid);
+            products.setUserUidBarcode(creatorUid + editTextProductBarcode.getText().toString().trim());
+        }
+        else {
+            products.setUserUid(currentUser);
+            products.setUserUidBarcode(currentUser + editTextProductBarcode.getText().toString().trim());
+        }
+
+
         new FirebaseDatabaseHelper().updateProduct(key, products, new FirebaseDatabaseHelper.DataStatus() {
             @Override
             public void DataIsLoaded(List<Products> productsList, List<String> keys) {
@@ -188,6 +248,33 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 return;
             }
         });
+    }
+
+    private void rejestrActivityDelete(){
+        String noteActivity = "usunął produkt o kodzie '" + barcode +"' ";
+        Date currentTime = Calendar.getInstance().getTime();
+        if(workerFb != null && workerFb.equals("true")){
+            activity = new Activity(noteActivity,creatorUid, currentTime+"", workerEmailFb);
+        }
+        else{
+            activity = new Activity(noteActivity,currentUser, currentTime+"", userEmailFb);
+        }
+        String key = databaseRefActivity.push().getKey();
+        databaseRefActivity.child(key).setValue(activity);
+    }
+
+    private void rejestrActivityUpdate(){
+        String noteActivity = "edytował produkt o kodzie '" + barcode+"' ";
+        Date currentTime = Calendar.getInstance().getTime();
+        if(workerFb != null && workerFb.equals("true")){
+            activity = new Activity(noteActivity,creatorUid, currentTime+"", workerEmailFb);
+        }
+        else{
+            activity = new Activity(noteActivity,currentUser, currentTime+"", userEmailFb);
+        }
+
+        String key = databaseRefActivity.push().getKey();
+        databaseRefActivity.child(key).setValue(activity);
     }
 
     private void scanning(){

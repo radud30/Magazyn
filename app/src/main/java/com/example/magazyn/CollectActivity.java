@@ -18,15 +18,19 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class CollectActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     ZXingScannerView ScannerView;
 
-    private DatabaseReference databaseRef, databaseReferenceWorker;
-    private Query query, queryWorker;
-    private String workerFb, creatorUid;
+    private DatabaseReference databaseRef, databaseReferenceWorker,databaseRefUsers,databaseRefActivity;
+    private Query query, queryWorker, queryUser;
+    private String workerFb, creatorUid,workerEmailFb,userEmailFb,productBarcode;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,8 @@ public class CollectActivity extends AppCompatActivity implements ZXingScannerVi
         setContentView(ScannerView);
 
         databaseReferenceWorker = FirebaseDatabase.getInstance().getReference("Workers");
+        databaseRefUsers = FirebaseDatabase.getInstance().getReference("Users");
+        databaseRefActivity = FirebaseDatabase.getInstance().getReference("Activity");
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         queryWorker = databaseReferenceWorker.child(currentUser);
@@ -44,6 +50,23 @@ public class CollectActivity extends AppCompatActivity implements ZXingScannerVi
                 if(snapshot.exists()){
                     workerFb = snapshot.child("worker").getValue().toString();
                     creatorUid = snapshot.child("creatorUid").getValue().toString();
+                    workerEmailFb = snapshot.child("email").getValue().toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        queryUser = databaseRefUsers.child(currentUser);
+        queryUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    userEmailFb = snapshot.child("email").getValue().toString();
+                    //Log.d("MyTag", userEmailFb);
                 }
             }
 
@@ -58,7 +81,7 @@ public class CollectActivity extends AppCompatActivity implements ZXingScannerVi
     public void handleResult(Result result) {
         AlertDialog.Builder alert = new AlertDialog.Builder(CollectActivity.this);
         alert.setTitle("Czy zebrać produkt o kodzie:");
-        String productBarcode = result.getText();
+        productBarcode = result.getText();
         alert.setMessage(productBarcode);
         //kliknięcie poza alert dialog
         alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -92,16 +115,18 @@ public class CollectActivity extends AppCompatActivity implements ZXingScannerVi
                             for(DataSnapshot barcodeSnapshot: snapshot.getChildren()){
                                 //Log.d("MyTag", "" + barcodeSnapshot.child("quantity").getValue());
                                 String quantity = barcodeSnapshot.child("quantity").getValue().toString();
-                                if(quantity.equals("1")){
-                                    barcodeSnapshot.getRef().removeValue();
+                                if(quantity.equals("0")){
+                                    Toast.makeText(CollectActivity.this, "Prouktu nie można zebrać ponieważ jego ilość to: 0",Toast.LENGTH_SHORT).show();
                                 }
                                 else {
                                     int intQuantity = Integer.parseInt(quantity);
                                     intQuantity--;
                                     barcodeSnapshot.getRef().child("quantity").setValue(intQuantity+"");
+                                    rejestrActivity();
+                                    Toast.makeText(CollectActivity.this, "Zebrano produkt",Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            Toast.makeText(CollectActivity.this, "Zebrano produkt",Toast.LENGTH_SHORT).show();
+
                         }
                         else{
                             Toast.makeText(CollectActivity.this, "Nie ma w bazie produktu o takim kodzie",Toast.LENGTH_SHORT).show();
@@ -127,6 +152,20 @@ public class CollectActivity extends AppCompatActivity implements ZXingScannerVi
         });
         alert.show();
 
+    }
+
+    private void rejestrActivity(){
+        String noteActivity = "zebrał produkt o kodzie '" + productBarcode + "' w ilości 1";
+        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Date currentTime = Calendar.getInstance().getTime();
+        if(workerFb != null && workerFb.equals("true")){
+            activity = new Activity(noteActivity,creatorUid, currentTime+"", workerEmailFb);
+        }else{
+            activity = new Activity(noteActivity,currentUser, currentTime+"", userEmailFb);
+        }
+
+        String key = databaseRefActivity.push().getKey();
+        databaseRefActivity.child(key).setValue(activity);
     }
 
     @Override

@@ -10,7 +10,7 @@ import android.widget.Button;
 
 public class WorkerActivity extends AppCompatActivity implements View.OnClickListener{
     private long mLastClickTime = 0;
-    private Button buttonAddWorker;
+    private Button buttonAddWorker, buttonWorkerPermission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +19,9 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
 
         buttonAddWorker = (Button) findViewById(R.id.button_dodajprac);
         buttonAddWorker.setOnClickListener(this);
+
+        buttonWorkerPermission = (Button) findViewById(R.id.button_workerPermission);
+        buttonWorkerPermission.setOnClickListener(this);
     }
 
     @Override
@@ -29,6 +32,10 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(WorkerActivity.this, AddWorkerActivity.class));
                 break;
+            case R.id.button_workerPermission:
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
+                mLastClickTime = SystemClock.elapsedRealtime();
+                startActivity(new Intent(WorkerActivity.this, WorkerPermissionActivity.class));
         }
     }
 }

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -25,69 +26,57 @@ import com.google.firebase.database.ValueEventListener;
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int CAMERA_REQUEST_CODE = 10;
     private long mLastClickTime = 0;
-    private Button buttonLogout, buttonAdd, buttonStockStatus, buttonCollect, buttonWorker;
-    private DatabaseReference mReferenceWorker;
-    private Query queryWorker;
-    private String workerFb, creatorUid;
-
-//    FirebaseAuth mFirebaseAuth;
-//    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private Button buttonLogout, buttonAdd, buttonStockStatus, buttonCollect, buttonWorker, buttonActivity;
+    private String workerExtra, permissionAddExtra, permissionStockStatusExtra, permissionCollectExtra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        workerExtra = getIntent().getStringExtra("EXTRA_WORKER_FB");
+        permissionAddExtra = getIntent().getStringExtra("EXTRA_PERMISSION_ADD_FB");
+        permissionStockStatusExtra = getIntent().getStringExtra("EXTRA_PERMISSION_STOCK_FB");
+        permissionCollectExtra = getIntent().getStringExtra("EXTRA_PERMISSION_COLLECT_FB");
+        //Log.d("MyTag", permissionExtra +"");
+
         buttonLogout = (Button) findViewById(R.id.button_logout);
         buttonLogout.setOnClickListener(this);
 
         buttonAdd = (Button) findViewById(R.id.button_dodaj);
         buttonAdd.setOnClickListener(this);
+        if(permissionAddExtra != null && permissionAddExtra.equals("false")){
+            buttonAdd.setEnabled(false);
+        }
 
         buttonStockStatus = (Button) findViewById(R.id.button_sprawdz);
         buttonStockStatus.setOnClickListener(this);
+        if(permissionStockStatusExtra != null && permissionStockStatusExtra.equals("false")){
+            buttonStockStatus.setEnabled(false);
+        }
 
         buttonCollect = (Button) findViewById(R.id.button_zbieraj);
         buttonCollect.setOnClickListener(this);
+        if(permissionCollectExtra != null && permissionCollectExtra.equals("false")){
+            buttonCollect.setEnabled(false);
+        }
 
         buttonWorker = (Button) findViewById(R.id.button_pracownik);
         buttonWorker.setOnClickListener(this);
+        if(workerExtra != null && workerExtra.equals("true")){
+            buttonWorker.setVisibility(View.GONE);
+        }
 
-        mReferenceWorker = FirebaseDatabase.getInstance().getReference("Workers");
-        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        queryWorker = mReferenceWorker.child(currentUser);
-        queryWorker.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    workerFb = snapshot.child("worker").getValue().toString();
-                    creatorUid = snapshot.child("creatorUid").getValue().toString();
-                    //Log.d("MyTag", isWorker);
-                    //Log.d("MyTag", creator_uid);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        buttonActivity = (Button) findViewById(R.id.buttonActivity);
+        buttonActivity.setOnClickListener(this);
+        if(workerExtra != null && workerExtra.equals("true")){
+            buttonActivity.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_logout:
-                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
-                mLastClickTime = SystemClock.elapsedRealtime();
-                FirebaseAuth.getInstance().signOut();
-                Intent intToMain = new Intent(HomeActivity.this, MainActivity.class);
-                // Zabezpieczenie przed kliknięceim wstecz po wylogowaniu
-                intToMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intToMain);
-                finish();
-                break;
             case R.id.button_dodaj:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -96,13 +85,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_sprawdz:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if(workerFb != null && workerFb.equals("true")){
-                    //Log.d("MyTag", "tu przehcodzimy do stanu praownika");
+                if(workerExtra != null && workerExtra.equals("true")){
+                    startActivity(new Intent(HomeActivity.this, WorkerStockStatusActivity.class));
                 }
                 else {
                     startActivity(new Intent(HomeActivity.this, StockStatusActivity.class));
                 }
-
                 break;
             case R.id.button_zbieraj:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
@@ -112,6 +100,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(HomeActivity.this, WorkerActivity.class));
+                break;
+            case R.id.buttonActivity:
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
+                mLastClickTime = SystemClock.elapsedRealtime();
+                startActivity(new Intent(HomeActivity.this, ActivityLogActivity.class));
+            case R.id.button_logout:
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
+                mLastClickTime = SystemClock.elapsedRealtime();
+                FirebaseAuth.getInstance().signOut();
+                Intent intToMain = new Intent(HomeActivity.this, MainActivity.class);
+                // Zabezpieczenie przed kliknięceim wstecz po wylogowaniu
+                intToMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intToMain);
+                finish();
                 break;
         }
     }

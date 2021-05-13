@@ -14,7 +14,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Magazyn">
-        <activity android:name=".AddWorkerActivity"></activity>
+        <activity android:name=".PermissionDetailsActivity"></activity>
+        <activity android:name=".WorkerPermissionActivity" />
+        <activity
+            android:name=".WorkerStockStatusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActivityLogActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddWorkerActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".WorkerActivity"
             android:screenOrientation="portrait" />

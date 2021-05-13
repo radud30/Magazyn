@@ -4,15 +4,22 @@ public class Workers {
     String email;
     String creatorUid;
     String worker;
+    String permissionAdd;
+    String permissionStockStatus;
+    String permissionCollect;
 
     public Workers(){
 
     }
 
-    public Workers(String email, String creatorUid, String worker) {
+    public Workers(String email, String creatorUid, String worker, String permissionAdd, String permissionStockStatus, String permissionCollect) {
         this.email = email;
         this.creatorUid = creatorUid;
         this.worker = worker;
+        this.permissionAdd = permissionAdd;
+        this.permissionStockStatus = permissionStockStatus;
+        this.permissionCollect = permissionCollect;
+
     }
 
 
@@ -39,4 +46,29 @@ public class Workers {
     public void setWorker(String worker) {
         this.worker = worker;
     }
+
+    public String getPermissionAdd() {
+        return permissionAdd;
+    }
+
+    public void setPermissionAdd(String permissionAdd) {
+        this.permissionAdd = permissionAdd;
+    }
+
+    public String getPermissionStockStatus() {
+        return permissionStockStatus;
+    }
+
+    public void setPermissionStockStatus(String permissionStockStatus) {
+        this.permissionStockStatus = permissionStockStatus;
+    }
+
+    public String getPermissionCollect() {
+        return permissionCollect;
+    }
+
+    public void setPermissionCollect(String permissionCollect) {
+        this.permissionCollect = permissionCollect;
+    }
+
 }

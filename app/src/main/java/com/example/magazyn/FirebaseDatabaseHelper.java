@@ -33,9 +33,7 @@ import java.util.List;
 
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        query = FirebaseDatabase.getInstance().getReference("Products")
-                .orderByChild("userUid")
-                .equalTo(currentUser);
+        query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUid").equalTo(currentUser);
     }
 
     public void readProducts(final DataStatus dataStatus){

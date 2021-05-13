@@ -94,7 +94,7 @@ public class AddWorkerActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Workers workers = new Workers(email, creatorUid,"true");
+                    Workers workers = new Workers(email, creatorUid,"true", "false", "false", "false");
 
                     FirebaseDatabase.getInstance().getReference("Workers")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

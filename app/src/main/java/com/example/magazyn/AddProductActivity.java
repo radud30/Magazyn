@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AddProductActivity extends AppCompatActivity implements View.OnClickListener{
@@ -34,10 +37,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     public static EditText editTextProductBarcode;
     private Button buttonAddProduct;
     private ImageButton imageButtonCamera;
-    private DatabaseReference databaseRefProducts, databaseRefWorkers;
-    private Query query, queryWorker;
-    private String workerFb, currentUser, creatorUid, userUidBarcode, userUidBarcodeWorker;
+    private DatabaseReference databaseRefProducts, databaseRefWorkers, databaseRefUsers, databaseRefActivity;
+    private Query query, queryWorker, queryUser;
+    private String workerFb, currentUser, creatorUid, userUidBarcode, userUidBarcodeWorker, userEmailFb, workerEmailFb;
     private Products product;
+    private Activity activity;
 
 
 
@@ -48,6 +52,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         databaseRefProducts = FirebaseDatabase.getInstance().getReference("Products");
         databaseRefWorkers = FirebaseDatabase.getInstance().getReference("Workers");
+        databaseRefUsers = FirebaseDatabase.getInstance().getReference("Users");
+        databaseRefActivity = FirebaseDatabase.getInstance().getReference("Activity");
 
         editTextProductName = (EditText) findViewById(R.id.editTextTextPersonName_nazwapr);
         editTextProductQuantity = (EditText) findViewById(R.id.editTextNumber2_ilosc);
@@ -66,13 +72,27 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    //Log.d("MyTag", snapshot.toString());
                     workerFb = snapshot.child("worker").getValue().toString();
                     creatorUid = snapshot.child("creatorUid").getValue().toString();
-                    //Log.d("MyTag", worker);
-                    //Log.d("MyTag", creatorUid);
+                    workerEmailFb = snapshot.child("email").getValue().toString();
                 }
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        queryUser = databaseRefUsers.child(currentUser);
+        queryUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    userEmailFb = snapshot.child("email").getValue().toString();
+                    //Log.d("MyTag", userEmailFb);
+                }
             }
 
             @Override
@@ -146,14 +166,17 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                         intQuantityFb = intQuantityFb + intQuantity;
                         barcodeSnapshot.getRef().child("quantity").setValue(intQuantityFb+"");
                         Toast.makeText(AddProductActivity.this, "Dodano "+ intQuantity +" produkt/ów o kodzie: " +"'" + barcode + "'",Toast.LENGTH_SHORT).show();
+                        rejestrActivity();
                     }
                 }
                 else {
                     if(workerFb != null && workerFb.equals("true")){
                         product = new Products(barcode, creatorUid,name,finalQuantity, userUidBarcodeWorker);
+                        rejestrActivity();
                     }
                     else{
                         product = new Products(barcode, currentUser,name,finalQuantity, userUidBarcode);
+                        rejestrActivity();
                     }
 
 
@@ -192,6 +215,21 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         });
 
 
+    }
+
+    private void rejestrActivity(){
+        String barcode = editTextProductBarcode.getText().toString().trim();
+        String quantity = editTextProductQuantity.getText().toString().trim();
+        String noteActivity = "dodał produkt o kodzie '" + barcode + "' w ilości " + quantity ;
+        Date currentTime = Calendar.getInstance().getTime();
+        if(workerFb != null && workerFb.equals("true")){
+            activity = new Activity(noteActivity,creatorUid, currentTime+"", workerEmailFb);
+        }else{
+            activity = new Activity(noteActivity,currentUser, currentTime+"", userEmailFb);
+        }
+
+        String key = databaseRefActivity.push().getKey();
+        databaseRefActivity.child(key).setValue(activity);
     }
 
     private void scanning(){
