@@ -1,10 +1,10 @@
 package com.example.magazyn;
 
 public class Activity {
-    String activity;
-    String userUid;
-    String date;
-    String whoAddedEmail;
+    public String activity;
+    public String userUid;
+    public String date;
+    public String whoAddedEmail;
 
     public Activity(){
 

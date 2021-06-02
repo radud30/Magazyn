@@ -5,18 +5,24 @@ public class Products {
     public String userUid;
     public String productName;
     public String quantity;
+    public String location;
     public String userUidBarcode;
+    public String userUidProductName;
+    public String userUidLocation;
 
     public Products(){
 
     }
 
-    public Products(String barcode, String userUid, String productName, String quantity, String userUidBarcode) {
+    public Products(String barcode, String userUid, String productName, String quantity, String location, String userUidBarcode, String userUidProductName, String userUidLocation) {
         this.barcode = barcode;
         this.userUid = userUid;
         this.productName = productName;
         this.quantity = quantity;
+        this.location = location;
         this.userUidBarcode = userUidBarcode;
+        this.userUidProductName = userUidProductName;
+        this.userUidLocation = userUidLocation;
     }
 
     public String getBarcode() {
@@ -59,4 +65,27 @@ public class Products {
         this.userUidBarcode = userUidBarcode;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getUserUidProductName() {
+        return userUidProductName;
+    }
+
+    public void setUserUidProductName(String userUidProductName) {
+        this.userUidProductName = userUidProductName;
+    }
+
+    public String getUserUidLocation() {
+        return userUidLocation;
+    }
+
+    public void setUserUidLocation(String userUidLocation) {
+        this.userUidLocation = userUidLocation;
+    }
 }

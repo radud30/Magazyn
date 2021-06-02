@@ -32,19 +32,31 @@ public class WorkerFirebaseDatabaseHelper {
         mReferenceWorker = FirebaseDatabase.getInstance().getReference("Workers");
     }
 
-    public void readProducts(final DataStatus dataStatus){
+    public void readProducts(String text, String search,final DataStatus dataStatus){
 
         mReferenceWorker = FirebaseDatabase.getInstance().getReference("Workers");
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         queryWorker = mReferenceWorker.child(currentUser);
+
         queryWorker.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     creatorUid = snapshot.child("creatorUid").getValue().toString();
                     //Log.d("MyTag", ""+creatorUid);
-                    query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUid").equalTo(creatorUid);
+                    if(text.equals("")){
+                        query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUid").equalTo(creatorUid);
+                    }
+                    else if(search.equals("Kod")){
+                        query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUidBarcode").startAt(creatorUid+text).endAt(creatorUid+text+"uf8ff");
+                    }
+                    else if(search.equals("Nazwa")){
+                        query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUidProductName").startAt(creatorUid+text).endAt(creatorUid+text+"uf8ff");
+                    }
+                    else if(search.equals("Lokalizacja")){
+                        query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUidLocation").startAt(creatorUid+text).endAt(creatorUid+text+"uf8ff");
+                    }
+
 
                     query.addValueEventListener(new ValueEventListener() {
                         @Override

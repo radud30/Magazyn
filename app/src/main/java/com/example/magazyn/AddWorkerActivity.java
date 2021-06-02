@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +28,9 @@ public class AddWorkerActivity extends AppCompatActivity implements View.OnClick
     private EditText editTextEmail, editTextPassword, editTextRepeatPassword;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
-    private String creatorUid;
+    private String creatorUid, permission;
+    private Spinner spinner;
+    private Workers workers;
     //private DatabaseReference mRef;
 
     @Override
@@ -44,7 +49,22 @@ public class AddWorkerActivity extends AppCompatActivity implements View.OnClick
         editTextRepeatPassword = (EditText) findViewById(R.id.editTextTextPassword_powhaslo);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar4);
+        spinner = (Spinner) findViewById(R.id.spinnerPermission);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinerPermissions, R.layout.support_simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                permission = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -94,7 +114,22 @@ public class AddWorkerActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Workers workers = new Workers(email, creatorUid,"true", "false", "false", "false");
+                    if(permission.equals("Brak")){
+                        workers = new Workers(email, creatorUid,"true", "false", "false", "false");
+                    }
+                    if(permission.equals("Zarządca")){
+                        workers = new Workers(email, creatorUid,"true", "true", "true", "true");
+                    }
+                    if(permission.equals("Pracownik - Wykładanie")){
+                        workers = new Workers(email, creatorUid,"true", "true", "false", "false");
+                    }
+                    if(permission.equals("Pracownik - Stan")){
+                        workers = new Workers(email, creatorUid,"true", "false", "true", "false");
+                    }
+                    if(permission.equals("Pracownik - Zbieraj")){
+                        workers = new Workers(email, creatorUid,"true", "false", "false", "true");
+                    }
+
 
                     FirebaseDatabase.getInstance().getReference("Workers")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -108,7 +143,10 @@ public class AddWorkerActivity extends AppCompatActivity implements View.OnClick
                                 editTextPassword.setText("");
                                 editTextRepeatPassword.setText("");
 
-                                startActivity(new Intent(AddWorkerActivity.this, WorkerActivity.class));
+                                FirebaseAuth.getInstance().signOut();
+                                Intent intToMain = new Intent(AddWorkerActivity.this, MainActivity.class);
+                                intToMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intToMain);
                             }
                             else {
                                 Toast.makeText(AddWorkerActivity.this, "Niepowodzenie w zakładaniu konta pracownika", Toast.LENGTH_SHORT).show();

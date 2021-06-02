@@ -10,11 +10,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,13 +41,17 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private EditText editTextProductName, editTextProductQuantity;
     public static EditText editTextProductBarcode;
     private Button buttonAddProduct;
-    private ImageButton imageButtonCamera;
-    private DatabaseReference databaseRefProducts, databaseRefWorkers, databaseRefUsers, databaseRefActivity;
-    private Query query, queryWorker, queryUser;
-    private String workerFb, currentUser, creatorUid, userUidBarcode, userUidBarcodeWorker, userEmailFb, workerEmailFb;
+    private ImageButton imageButtonCamera, imageButtonDelLocation, imageButtonAddLocation, imageButtonShowDel;
+    private DatabaseReference databaseRefProducts, databaseRefWorkers, databaseRefUsers, databaseRefActivity, databaseRefLoation, databaseRefDelLocation;
+    private Query query, queryWorker, queryUser, queryLocation, queryDelLocation;
+    private String workerFb, currentUser, creatorUid, userUidBarcode, userUidBarcodeWorker,userUidProdutName, userUidLocation, userEmailFb, workerEmailFb, selectedItem;
     private Products product;
     private Activity activity;
-
+    private Location location;
+    private AutoCompleteTextView autoCompleteLocation;
+    private ArrayList<String> arrayList = new ArrayList<>();
+    private Spinner spinner;
+    boolean visable = false;
 
 
     @Override
@@ -54,17 +63,42 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         databaseRefWorkers = FirebaseDatabase.getInstance().getReference("Workers");
         databaseRefUsers = FirebaseDatabase.getInstance().getReference("Users");
         databaseRefActivity = FirebaseDatabase.getInstance().getReference("Activity");
+        databaseRefLoation = FirebaseDatabase.getInstance().getReference("Location");
+        databaseRefDelLocation = FirebaseDatabase.getInstance().getReference();
 
         editTextProductName = (EditText) findViewById(R.id.editTextTextPersonName_nazwapr);
         editTextProductQuantity = (EditText) findViewById(R.id.editTextNumber2_ilosc);
         editTextProductBarcode = (EditText) findViewById(R.id.editText_kodpr);
-
+        autoCompleteLocation = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_localization);
 
         buttonAddProduct = (Button) findViewById(R.id.button_dodajprod);
         buttonAddProduct.setOnClickListener(this);
 
         imageButtonCamera = (ImageButton) findViewById(R.id.imageButton_camera);
         imageButtonCamera.setOnClickListener(this);
+
+        imageButtonDelLocation = (ImageButton) findViewById(R.id.imageButton_delLocation);
+        imageButtonDelLocation.setOnClickListener(this);
+
+        imageButtonAddLocation = (ImageButton) findViewById(R.id.imageButtonAddLocation);
+        imageButtonAddLocation.setOnClickListener(this);
+
+        imageButtonShowDel = (ImageButton) findViewById((R.id.imageButtonShow)) ;
+        imageButtonShowDel.setOnClickListener(this);
+
+        spinner = (Spinner) findViewById(R.id.spinnerLocation);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedItem = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
         queryWorker = databaseRefWorkers.child(currentUser);
@@ -75,6 +109,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     workerFb = snapshot.child("worker").getValue().toString();
                     creatorUid = snapshot.child("creatorUid").getValue().toString();
                     workerEmailFb = snapshot.child("email").getValue().toString();
+                    showDataAutoComplete();
+                    showDataSpinner();
                 }
 
             }
@@ -91,6 +127,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     userEmailFb = snapshot.child("email").getValue().toString();
+                    showDataAutoComplete();
+                    showDataSpinner();
                     //Log.d("MyTag", userEmailFb);
                 }
             }
@@ -100,6 +138,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
+
+
     }
 
     @Override
@@ -115,13 +155,95 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 mLastClickTime = SystemClock.elapsedRealtime();
                 scanning();
                 break;
+            case  R.id.imageButtonAddLocation:
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
+                mLastClickTime = SystemClock.elapsedRealtime();
+                addLocation(0);
+                break;
+            case R.id.imageButton_delLocation:
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
+                mLastClickTime = SystemClock.elapsedRealtime();
+                delLocation();
+                break;
+            case R.id.imageButtonShow:
+                visable = !visable;
+                spinner.setVisibility(visable ? View.VISIBLE: View.GONE);
+                imageButtonDelLocation.setVisibility(visable ? View.VISIBLE: View.GONE);
+                break;
         }
+    }
+
+    private void addLocation(final int x){
+        String textLocation = autoCompleteLocation.getText().toString().trim();
+        if(workerFb != null && workerFb.equals("true")){
+            queryLocation = databaseRefLoation.orderByChild("userUidLocation").equalTo(creatorUid+textLocation);
+        }else{
+            queryLocation = databaseRefLoation.orderByChild("userUidLocation").equalTo(currentUser+textLocation);
+        }
+        queryLocation.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists() || textLocation.equals("")){
+                    if(x == 0){
+                        Toast.makeText(AddProductActivity.this, "Taka lokalizacja już istnieje",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    if(workerFb != null && workerFb.equals("true")){
+                        location = new Location(creatorUid,textLocation,creatorUid+textLocation);
+                    }else{
+                        location = new Location(currentUser,textLocation,currentUser+textLocation);
+                    }
+
+                    String key = databaseRefLoation.push().getKey();
+                    databaseRefLoation.child(key).setValue(location);
+                    if(x == 0){
+                        Toast.makeText(AddProductActivity.this, "Dodano lokalizację",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void delLocation(){
+        String textLocation = selectedItem;
+        if(workerFb != null && workerFb.equals("true")){
+            queryDelLocation = databaseRefDelLocation.child("Location").orderByChild("userUidLocation").equalTo(creatorUid+textLocation);
+        }else{
+            queryDelLocation = databaseRefDelLocation.child("Location").orderByChild("userUidLocation").equalTo(currentUser+textLocation);
+        }
+        queryDelLocation.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for(DataSnapshot locationSnapshot: snapshot.getChildren()){
+                        locationSnapshot.getRef().removeValue();
+                    }
+                    Toast.makeText(AddProductActivity.this, "Usunięto lokalizację",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(AddProductActivity.this, "Taka lokalizacja nie istnieje",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void addProduct(){
         String name = editTextProductName.getText().toString().trim();
         String quantity = editTextProductQuantity.getText().toString().trim();
         String barcode = editTextProductBarcode.getText().toString().trim();
+        String textLocation = autoCompleteLocation.getText().toString().trim();
 
         if(barcode.isEmpty()){
             editTextProductBarcode.setError("Produkt musi posiadać kod");
@@ -147,11 +269,15 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         if(workerFb != null && workerFb.equals("true")){
             //Log.d("MyTag", worker);
             userUidBarcodeWorker = creatorUid + barcode;
+            userUidProdutName = creatorUid + name;
+            userUidLocation = creatorUid + textLocation;
             query = databaseRefProducts.orderByChild("userUidBarcode").equalTo(userUidBarcodeWorker);
         }
         else{
             //reference = FirebaseDatabase.getInstance().getReference("Products");
             userUidBarcode = currentUser + barcode;
+            userUidProdutName = currentUser + name;
+            userUidLocation = currentUser + textLocation;
             query = databaseRefProducts.orderByChild("userUidBarcode").equalTo(userUidBarcode);
         }
 
@@ -167,16 +293,22 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                         barcodeSnapshot.getRef().child("quantity").setValue(intQuantityFb+"");
                         Toast.makeText(AddProductActivity.this, "Dodano "+ intQuantity +" produkt/ów o kodzie: " +"'" + barcode + "'",Toast.LENGTH_SHORT).show();
                         rejestrActivity();
+                        addLocation(1);
+                        clear();
                     }
                 }
                 else {
                     if(workerFb != null && workerFb.equals("true")){
-                        product = new Products(barcode, creatorUid,name,finalQuantity, userUidBarcodeWorker);
+                        product = new Products(barcode, creatorUid,name,finalQuantity,textLocation, userUidBarcodeWorker,userUidProdutName,userUidLocation);
                         rejestrActivity();
+                        addLocation(1);
+                        clear();
                     }
                     else{
-                        product = new Products(barcode, currentUser,name,finalQuantity, userUidBarcode);
+                        product = new Products(barcode, currentUser,name,finalQuantity,textLocation, userUidBarcode,userUidProdutName,userUidLocation);
                         rejestrActivity();
+                        addLocation(1);
+                        clear();
                     }
 
 
@@ -203,9 +335,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     });
 
                 }
-                editTextProductBarcode.setText("");
-                editTextProductName.setText("");
-                editTextProductQuantity.setText("1");
+
             }
 
             @Override
@@ -214,13 +344,19 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
+    }
 
+    private void clear(){
+        editTextProductBarcode.setText("");
+        editTextProductName.setText("");
+        editTextProductQuantity.setText("1");
+        autoCompleteLocation.setText("");
     }
 
     private void rejestrActivity(){
         String barcode = editTextProductBarcode.getText().toString().trim();
         String quantity = editTextProductQuantity.getText().toString().trim();
-        String noteActivity = "dodał produkt o kodzie '" + barcode + "' w ilości " + quantity ;
+        String noteActivity = "dodał na stan produkt o kodzie '" + barcode + "' w ilości " + quantity ;
         Date currentTime = Calendar.getInstance().getTime();
         if(workerFb != null && workerFb.equals("true")){
             activity = new Activity(noteActivity,creatorUid, currentTime+"", workerEmailFb);
@@ -230,6 +366,68 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         String key = databaseRefActivity.push().getKey();
         databaseRefActivity.child(key).setValue(activity);
+    }
+
+    private void showDataAutoComplete() {
+        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseRefDelLocation.child("Location").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayList.clear();
+                for(DataSnapshot item: snapshot.getChildren()){
+                    Location location = item.getValue(Location.class);
+                    String userUid = location.getUserUid();
+                    if(workerFb != null && workerFb.equals("true")){
+                        if(userUid != null && userUid.equals(creatorUid)){
+                            arrayList.add(location.getLocation());
+                        }
+                    }else{
+                        if(userUid != null && userUid.equals(currentUser)){
+                            arrayList.add(location.getLocation());
+                        }
+                    }
+
+                }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_list_item_1 ,arrayList);
+                autoCompleteLocation.setAdapter(arrayAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void showDataSpinner(){
+        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseRefDelLocation.child("Location").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayList.clear();
+                for(DataSnapshot item: snapshot.getChildren()){
+                    Location location = item.getValue(Location.class);
+                    String userUid = location.getUserUid();
+                    if(workerFb != null && workerFb.equals("true")){
+                        if(userUid != null && userUid.equals(creatorUid)){
+                            arrayList.add(location.getLocation());
+                        }
+                    }else{
+                        if(userUid != null && userUid.equals(currentUser)){
+                            arrayList.add(location.getLocation());
+                        }
+                    }
+
+                }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(AddProductActivity.this, R.layout.support_simple_spinner_dropdown_item ,arrayList);
+                spinner.setAdapter(arrayAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void scanning(){

@@ -30,13 +30,25 @@ import java.util.List;
     public FirebaseDatabaseHelper() {
         mDatabase = FirebaseDatabase.getInstance();
         mReferenceProdukty = mDatabase.getReference("Products");
-
-        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUid").equalTo(currentUser);
     }
 
-    public void readProducts(final DataStatus dataStatus){
+    public void readProducts(String text,String search,final DataStatus dataStatus){
+
+        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        //Log.d("MyTag", currentUser+search +"");
+        if(text.equals("")){
+            query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUid").equalTo(currentUser);
+        }
+        else if(search.equals("Kod")){
+            query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUidBarcode").startAt(currentUser+text).endAt(currentUser+text+"uf8ff");
+            //query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUidBarcode").equalTo(currentUser+search);
+        }
+        else if(search.equals("Nazwa")){
+            query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUidProductName").startAt(currentUser+text).endAt(currentUser+text+"uf8ff");
+        }
+        else if (search.equals("Lokalizacja")){
+            query = FirebaseDatabase.getInstance().getReference("Products").orderByChild("userUidLocation").startAt(currentUser+text).endAt(currentUser+text+"uf8ff");
+        }
 
         query.addValueEventListener(new ValueEventListener() {
             @Override

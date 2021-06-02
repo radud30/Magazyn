@@ -155,7 +155,7 @@ public class CollectActivity extends AppCompatActivity implements ZXingScannerVi
     }
 
     private void rejestrActivity(){
-        String noteActivity = "zebrał produkt o kodzie '" + productBarcode + "' w ilości 1";
+        String noteActivity = "zebrał ze stanu produkt o kodzie '" + productBarcode + "' w ilości 1";
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Date currentTime = Calendar.getInstance().getTime();
         if(workerFb != null && workerFb.equals("true")){

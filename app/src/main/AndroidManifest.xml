@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Magazyn">
-        <activity android:name=".PermissionDetailsActivity"></activity>
+        <activity android:name=".PermissionDetailsActivity" />
         <activity android:name=".WorkerPermissionActivity" />
         <activity
             android:name=".WorkerStockStatusActivity"

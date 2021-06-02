@@ -1,12 +1,12 @@
 package com.example.magazyn;
 
 public class Workers {
-    String email;
-    String creatorUid;
-    String worker;
-    String permissionAdd;
-    String permissionStockStatus;
-    String permissionCollect;
+    public String email;
+    public String creatorUid;
+    public String worker;
+    public String permissionAdd;
+    public String permissionStockStatus;
+    public String permissionCollect;
 
     public Workers(){
 

@@ -13,6 +13,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,12 +39,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     private EditText editTextProductName, editTextProductQuantity;
     public static EditText editTextProductBarcode;
+    private AutoCompleteTextView autoCompleteTextViewLocation;
     private Button buttonUpdate, buttonDelete;
     private ImageButton imageButtonCamera;
-    private DatabaseReference databaseRefUsers, databaseRefActivity, databaseRefWorkers;
-    private Query queryUser, queryWorker;
+    private DatabaseReference databaseRefUsers, databaseRefActivity, databaseRefWorkers,databaseRefLoation;
+    private Query queryUser, queryWorker, queryLocation;
     private  Activity activity;
-    private String key, barcode, name, quantity, currentUser, userEmailFb, workerFb, workerEmailFb, creatorUid;
+    private Location locat;
+    private String key, barcode, name, quantity, location, currentUser, userEmailFb, workerFb, workerEmailFb, creatorUid;
+    private ArrayList<String> arrayList = new ArrayList<>();
 
 
     @Override
@@ -53,6 +59,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         barcode = getIntent().getStringExtra("barcode");
         name = getIntent().getStringExtra("name");
         quantity = getIntent().getStringExtra("quantity");
+        location = getIntent().getStringExtra("location");
 
         editTextProductName = (EditText) findViewById(R.id.editTextTextPersonName_nazwa);
         editTextProductName.setText(name);
@@ -60,6 +67,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         editTextProductQuantity.setText(quantity);
         editTextProductBarcode = (EditText) findViewById(R.id.editTextNumber_kod);
         editTextProductBarcode.setText(barcode);
+        autoCompleteTextViewLocation = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_editLocation);
+        autoCompleteTextViewLocation.setText(location);
 
         buttonUpdate = (Button) findViewById(R.id.button_update);
         buttonDelete = (Button) findViewById(R.id.button_usun);
@@ -68,6 +77,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         databaseRefUsers = FirebaseDatabase.getInstance().getReference("Users");
         databaseRefActivity = FirebaseDatabase.getInstance().getReference("Activity");
         databaseRefWorkers = FirebaseDatabase.getInstance().getReference("Workers");
+        databaseRefLoation = FirebaseDatabase.getInstance().getReference("Location");
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
         queryUser = databaseRefUsers.child(currentUser);
@@ -76,6 +86,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     userEmailFb = snapshot.child("email").getValue().toString();
+                    showDataAutoComplete();
                 }
             }
 
@@ -93,6 +104,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     workerFb = snapshot.child("worker").getValue().toString();
                     creatorUid = snapshot.child("creatorUid").getValue().toString();
                     workerEmailFb = snapshot.child("email").getValue().toString();
+                    showDataAutoComplete();
                 }
 
             }
@@ -134,6 +146,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 }
 
                 rejestrActivityUpdate();
+                addLocation();
                 updateProduct();
 
             }
@@ -177,6 +190,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 scanning();
             }
         });
+
     }
 
 
@@ -190,13 +204,19 @@ public class ProductDetailsActivity extends AppCompatActivity {
         products.setBarcode(editTextProductBarcode.getText().toString().trim());
         products.setProductName(editTextProductName.getText().toString().trim());
         products.setQuantity(finalQuantity);
+        products.setLocation(autoCompleteTextViewLocation.getText().toString().trim());
+
         if(workerFb != null && workerFb.equals("true")){
             products.setUserUid(creatorUid);
             products.setUserUidBarcode(creatorUid + editTextProductBarcode.getText().toString().trim());
+            products.setUserUidProductName(creatorUid + editTextProductName.getText().toString().trim());
+            products.setUserUidLocation(creatorUid + autoCompleteTextViewLocation.getText().toString().trim());
         }
         else {
             products.setUserUid(currentUser);
             products.setUserUidBarcode(currentUser + editTextProductBarcode.getText().toString().trim());
+            products.setUserUidProductName(currentUser + editTextProductName.getText().toString().trim());
+            products.setUserUidLocation(currentUser + autoCompleteTextViewLocation.getText().toString().trim());
         }
 
 
@@ -264,7 +284,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     }
 
     private void rejestrActivityUpdate(){
-        String noteActivity = "edytował produkt o kodzie '" + barcode+"' ";
+        String noteActivity = "edytował produkt o kodzie '" + barcode+"' " + "nazwie '"+ name + "' ilości '" + quantity + "' na kod'" + editTextProductBarcode.getText().toString() +"' nazwa '" +editTextProductName.getText().toString() + "' ilość '" + editTextProductQuantity.getText().toString() + "'";
         Date currentTime = Calendar.getInstance().getTime();
         if(workerFb != null && workerFb.equals("true")){
             activity = new Activity(noteActivity,creatorUid, currentTime+"", workerEmailFb);
@@ -275,6 +295,69 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         String key = databaseRefActivity.push().getKey();
         databaseRefActivity.child(key).setValue(activity);
+    }
+
+    private void addLocation(){
+        String textLocation = autoCompleteTextViewLocation.getText().toString().trim();
+        if(workerFb != null && workerFb.equals("true")){
+            queryLocation = databaseRefLoation.orderByChild("userUidLocation").equalTo(creatorUid+textLocation);
+        }else{
+            queryLocation = databaseRefLoation.orderByChild("userUidLocation").equalTo(currentUser+textLocation);
+        }
+        queryLocation.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists() || textLocation.equals("")){
+
+                }else{
+                    if(workerFb != null && workerFb.equals("true")){
+                        locat = new Location(creatorUid,textLocation,creatorUid+textLocation);
+                    }else{
+                        locat = new Location(currentUser,textLocation,currentUser+textLocation);
+                    }
+
+                    String key = databaseRefLoation.push().getKey();
+                    databaseRefLoation.child(key).setValue(locat);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void showDataAutoComplete() {
+        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseRefLoation.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayList.clear();
+                for(DataSnapshot item: snapshot.getChildren()){
+                    Location location = item.getValue(Location.class);
+                    String userUid = location.getUserUid();
+                    if(workerFb != null && workerFb.equals("true")){
+                        if(userUid != null && userUid.equals(creatorUid)){
+                            arrayList.add(location.getLocation());
+                        }
+                    }else{
+                        if(userUid != null && userUid.equals(currentUser)){
+                            arrayList.add(location.getLocation());
+                        }
+                    }
+
+                }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(ProductDetailsActivity.this, android.R.layout.simple_list_item_1 ,arrayList);
+                autoCompleteTextViewLocation.setAdapter(arrayAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void scanning(){

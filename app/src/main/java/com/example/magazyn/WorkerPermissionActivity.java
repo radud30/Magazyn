@@ -14,8 +14,7 @@ import java.util.List;
 public class WorkerPermissionActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private FirebaseDatabase mDatabase;
-    private DatabaseReference mReferenceWorker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

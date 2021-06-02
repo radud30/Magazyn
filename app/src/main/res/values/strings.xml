@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Magazyn</string>
+    
+    <string-array name="spinerPermissions">
+        <item>Brak</item>
+        <item>Zarządca</item>
+        <item>Pracownik - Wykładanie</item>
+        <item>Pracownik - Stan</item>
+        <item>Pracownik - Zbieraj</item>
+    </string-array>
+
+    <string-array name="spinerSearch">
+        <item>Kod</item>
+        <item>Nazwa</item>
+        <item>Lokalizacja</item>
+    </string-array>
 </resources>

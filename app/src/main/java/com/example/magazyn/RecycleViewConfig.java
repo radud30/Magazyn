@@ -27,7 +27,7 @@ public class RecycleViewConfig {
     }
 
     class ProduktyItemView extends RecyclerView.ViewHolder{
-        private TextView textViewBarcode, textViewName, textViewQuantity;
+        private TextView textViewBarcode, textViewName, textViewQuantity, textViewLocation;
         private String key;
 
         public ProduktyItemView(ViewGroup parent){
@@ -35,6 +35,7 @@ public class RecycleViewConfig {
             textViewBarcode = (TextView) itemView.findViewById(R.id.textView_kod);
             textViewName = (TextView) itemView.findViewById(R.id.textView_nazwa);
             textViewQuantity = (TextView) itemView.findViewById(R.id.textView_ilosc);
+            textViewLocation = (TextView) itemView.findViewById(R.id.textView_location);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -47,6 +48,7 @@ public class RecycleViewConfig {
                     intent.putExtra("barcode", textViewBarcode.getText().toString());
                     intent.putExtra("name", textViewName.getText().toString());
                     intent.putExtra("quantity", textViewQuantity.getText().toString());
+                    intent.putExtra("location",textViewLocation.getText().toString());
 
                     mContext.startActivity(intent);
                 }
@@ -56,6 +58,7 @@ public class RecycleViewConfig {
             textViewBarcode.setText(products.getBarcode());
             textViewName.setText(products.getProductName());
             textViewQuantity.setText(products.getQuantity());
+            textViewLocation.setText(products.getLocation());
             this.key = key;
 
         }
