@@ -31,6 +31,7 @@ public class WorkerStockStatusActivity extends AppCompatActivity {
         new WorkerFirebaseDatabaseHelper().readProducts("","",new WorkerFirebaseDatabaseHelper.DataStatus() {
             @Override
             public void DataIsLoaded(List<Products> products, List<String> keys) {
+                findViewById(R.id.progressBarWorkerStock).setVisibility(View.GONE);
                 new RecycleViewConfig().setConfig(mRecyclerView, WorkerStockStatusActivity.this, products, keys);
             }
         });

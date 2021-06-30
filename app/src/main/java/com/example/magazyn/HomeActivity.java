@@ -26,8 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int CAMERA_REQUEST_CODE = 10;
     private long mLastClickTime = 0;
-    private Button buttonLogout, buttonAdd, buttonStockStatus, buttonCollect, buttonWorker, buttonActivity;
-    private String workerExtra, permissionAddExtra, permissionStockStatusExtra, permissionCollectExtra;
+    private Button buttonLogout, buttonAdd, buttonStockStatus, buttonCollect, buttonWorker, buttonActivity, buttonLocation;
+    private String workerExtra, permissionAddExtra, permissionStockStatusExtra, permissionCollectExtra, permissionLocationExtra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         permissionAddExtra = getIntent().getStringExtra("EXTRA_PERMISSION_ADD_FB");
         permissionStockStatusExtra = getIntent().getStringExtra("EXTRA_PERMISSION_STOCK_FB");
         permissionCollectExtra = getIntent().getStringExtra("EXTRA_PERMISSION_COLLECT_FB");
+        permissionLocationExtra = getIntent().getStringExtra("EXTRA_PERMISSION_LOCATION_FB");
         //Log.d("MyTag", permissionExtra +"");
 
         buttonLogout = (Button) findViewById(R.id.button_logout);
@@ -61,6 +62,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             buttonCollect.setEnabled(false);
         }
 
+        buttonLocation = (Button) findViewById(R.id.buttonLocation);
+        buttonLocation.setOnClickListener(this);
+        if(permissionLocationExtra != null && permissionLocationExtra.equals("false")){
+            buttonCollect.setEnabled(false);
+        }
+
         buttonWorker = (Button) findViewById(R.id.button_pracownik);
         buttonWorker.setOnClickListener(this);
         if(workerExtra != null && workerExtra.equals("true")){
@@ -72,6 +79,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if(workerExtra != null && workerExtra.equals("true")){
             buttonActivity.setVisibility(View.GONE);
         }
+
     }
 
     @Override
@@ -105,6 +113,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(HomeActivity.this, ActivityLogActivity.class));
+                break;
+            case R.id.buttonLocation:
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
+                mLastClickTime = SystemClock.elapsedRealtime();
+                startActivity(new Intent(HomeActivity.this, LocationActivity.class));
+                break;
             case R.id.button_logout:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();

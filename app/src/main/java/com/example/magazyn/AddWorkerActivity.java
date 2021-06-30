@@ -115,19 +115,19 @@ public class AddWorkerActivity extends AppCompatActivity implements View.OnClick
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     if(permission.equals("Brak")){
-                        workers = new Workers(email, creatorUid,"true", "false", "false", "false");
+                        workers = new Workers(email, creatorUid,"true", "false", "false", "false","false");
                     }
                     if(permission.equals("Zarządca")){
-                        workers = new Workers(email, creatorUid,"true", "true", "true", "true");
+                        workers = new Workers(email, creatorUid,"true", "true", "true", "true","true");
                     }
                     if(permission.equals("Pracownik - Wykładanie")){
-                        workers = new Workers(email, creatorUid,"true", "true", "false", "false");
+                        workers = new Workers(email, creatorUid,"true", "true", "false", "false", "true");
                     }
                     if(permission.equals("Pracownik - Stan")){
-                        workers = new Workers(email, creatorUid,"true", "false", "true", "false");
+                        workers = new Workers(email, creatorUid,"true", "false", "true", "false","false");
                     }
                     if(permission.equals("Pracownik - Zbieraj")){
-                        workers = new Workers(email, creatorUid,"true", "false", "false", "true");
+                        workers = new Workers(email, creatorUid,"true", "false", "false", "true", "false");
                     }
 
 

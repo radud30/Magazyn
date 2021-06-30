@@ -9,12 +9,13 @@ public class Products {
     public String userUidBarcode;
     public String userUidProductName;
     public String userUidLocation;
+    public String imageUrl;
 
     public Products(){
 
     }
 
-    public Products(String barcode, String userUid, String productName, String quantity, String location, String userUidBarcode, String userUidProductName, String userUidLocation) {
+    public Products(String barcode, String userUid, String productName, String quantity, String location, String userUidBarcode, String userUidProductName, String userUidLocation, String imageUrl) {
         this.barcode = barcode;
         this.userUid = userUid;
         this.productName = productName;
@@ -23,6 +24,7 @@ public class Products {
         this.userUidBarcode = userUidBarcode;
         this.userUidProductName = userUidProductName;
         this.userUidLocation = userUidLocation;
+        this.imageUrl = imageUrl;
     }
 
     public String getBarcode() {
@@ -87,5 +89,13 @@ public class Products {
 
     public void setUserUidLocation(String userUidLocation) {
         this.userUidLocation = userUidLocation;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

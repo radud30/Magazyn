@@ -1,26 +1,38 @@
 package com.example.magazyn;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +40,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,23 +52,25 @@ import java.util.List;
 
 public class AddProductActivity extends AppCompatActivity implements View.OnClickListener{
     public static final int CAMERA_REQUEST_CODE = 10;
+    private static final int IMAGE_CAPTURE_CODE = 11;
     private long mLastClickTime = 0;
 
     private EditText editTextProductName, editTextProductQuantity;
     public static EditText editTextProductBarcode;
     private Button buttonAddProduct;
-    private ImageButton imageButtonCamera, imageButtonDelLocation, imageButtonAddLocation, imageButtonShowDel;
+    private ImageButton imageButtonCamera, imageButtonAddLocation, imageButtonPhoto;
     private DatabaseReference databaseRefProducts, databaseRefWorkers, databaseRefUsers, databaseRefActivity, databaseRefLoation, databaseRefDelLocation;
-    private Query query, queryWorker, queryUser, queryLocation, queryDelLocation;
-    private String workerFb, currentUser, creatorUid, userUidBarcode, userUidBarcodeWorker,userUidProdutName, userUidLocation, userEmailFb, workerEmailFb, selectedItem;
+    private Query query, queryWorker, queryUser, queryLocation;
+    private String workerFb, currentUser, creatorUid, userUidBarcode, userUidBarcodeWorker,userUidProdutName, userUidLocation, userEmailFb, workerEmailFb, uriSucces ="";
     private Products product;
     private Activity activity;
     private Location location;
     private AutoCompleteTextView autoCompleteLocation;
     private ArrayList<String> arrayList = new ArrayList<>();
-    private Spinner spinner;
-    boolean visable = false;
-
+    private ImageView imageView;
+    private StorageReference reference;
+    private Uri imageUri;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +84,15 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         databaseRefLoation = FirebaseDatabase.getInstance().getReference("Location");
         databaseRefDelLocation = FirebaseDatabase.getInstance().getReference();
 
+        reference = FirebaseStorage.getInstance().getReference();
+
         editTextProductName = (EditText) findViewById(R.id.editTextTextPersonName_nazwapr);
         editTextProductQuantity = (EditText) findViewById(R.id.editTextNumber2_ilosc);
         editTextProductBarcode = (EditText) findViewById(R.id.editText_kodpr);
         autoCompleteLocation = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_localization);
+
+        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.setOnClickListener(this);
 
         buttonAddProduct = (Button) findViewById(R.id.button_dodajprod);
         buttonAddProduct.setOnClickListener(this);
@@ -77,28 +100,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         imageButtonCamera = (ImageButton) findViewById(R.id.imageButton_camera);
         imageButtonCamera.setOnClickListener(this);
 
-        imageButtonDelLocation = (ImageButton) findViewById(R.id.imageButton_delLocation);
-        imageButtonDelLocation.setOnClickListener(this);
+        imageButtonPhoto = (ImageButton) findViewById(R.id.imageButtonPhoto);
+        imageButtonPhoto.setOnClickListener(this);
 
-        imageButtonAddLocation = (ImageButton) findViewById(R.id.imageButtonAddLocation);
-        imageButtonAddLocation.setOnClickListener(this);
-
-        imageButtonShowDel = (ImageButton) findViewById((R.id.imageButtonShow)) ;
-        imageButtonShowDel.setOnClickListener(this);
-
-        spinner = (Spinner) findViewById(R.id.spinnerLocation);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedItem = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        progressBar = (ProgressBar) findViewById(R.id.progressBarAdd);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
         queryWorker = databaseRefWorkers.child(currentUser);
@@ -110,7 +115,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     creatorUid = snapshot.child("creatorUid").getValue().toString();
                     workerEmailFb = snapshot.child("email").getValue().toString();
                     showDataAutoComplete();
-                    showDataSpinner();
                 }
 
             }
@@ -128,7 +132,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 if(snapshot.exists()){
                     userEmailFb = snapshot.child("email").getValue().toString();
                     showDataAutoComplete();
-                    showDataSpinner();
                     //Log.d("MyTag", userEmailFb);
                 }
             }
@@ -153,27 +156,44 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             case R.id.imageButton_camera:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                scanning();
+                verifyPermission(0);
                 break;
-            case  R.id.imageButtonAddLocation:
+            case R.id.imageView:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                addLocation(0);
+                addPhoto();
                 break;
-            case R.id.imageButton_delLocation:
+            case R.id.imageButtonPhoto:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                delLocation();
+                verifyPermission(1);
                 break;
-            case R.id.imageButtonShow:
-                visable = !visable;
-                spinner.setVisibility(visable ? View.VISIBLE: View.GONE);
-                imageButtonDelLocation.setVisibility(visable ? View.VISIBLE: View.GONE);
-                break;
+
         }
     }
 
-    private void addLocation(final int x){
+    private void addPhoto(){
+        Intent galleryIntent = new Intent();
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        galleryIntent.setType("image/*");
+        startActivityForResult(galleryIntent, 2);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 2 && resultCode == RESULT_OK && data != null){
+            imageUri = data.getData();
+            imageView.setImageURI(imageUri);
+        }
+
+        if(resultCode == RESULT_OK){
+            imageView.setImageURI(imageUri);
+        }
+    }
+
+    private void addLocation(){
         String textLocation = autoCompleteLocation.getText().toString().trim();
         if(workerFb != null && workerFb.equals("true")){
             queryLocation = databaseRefLoation.orderByChild("userUidLocation").equalTo(creatorUid+textLocation);
@@ -183,23 +203,16 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         queryLocation.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists() || textLocation.equals("")){
-                    if(x == 0){
-                        Toast.makeText(AddProductActivity.this, "Taka lokalizacja już istnieje",Toast.LENGTH_SHORT).show();
-                    }
-                }else{
+                if(snapshot.exists()){
+//                    Toast.makeText(AddProductActivity.this, "Taka lokalizacja już istnieje",Toast.LENGTH_SHORT).show();
+                }else if(!textLocation.equals("")){
                     if(workerFb != null && workerFb.equals("true")){
                         location = new Location(creatorUid,textLocation,creatorUid+textLocation);
                     }else{
                         location = new Location(currentUser,textLocation,currentUser+textLocation);
                     }
-
                     String key = databaseRefLoation.push().getKey();
                     databaseRefLoation.child(key).setValue(location);
-                    if(x == 0){
-                        Toast.makeText(AddProductActivity.this, "Dodano lokalizację",Toast.LENGTH_SHORT).show();
-                    }
-
                 }
             }
 
@@ -211,33 +224,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void delLocation(){
-        String textLocation = selectedItem;
-        if(workerFb != null && workerFb.equals("true")){
-            queryDelLocation = databaseRefDelLocation.child("Location").orderByChild("userUidLocation").equalTo(creatorUid+textLocation);
-        }else{
-            queryDelLocation = databaseRefDelLocation.child("Location").orderByChild("userUidLocation").equalTo(currentUser+textLocation);
-        }
-        queryDelLocation.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    for(DataSnapshot locationSnapshot: snapshot.getChildren()){
-                        locationSnapshot.getRef().removeValue();
-                    }
-                    Toast.makeText(AddProductActivity.this, "Usunięto lokalizację",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(AddProductActivity.this, "Taka lokalizacja nie istnieje",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     private void addProduct(){
         String name = editTextProductName.getText().toString().trim();
@@ -254,6 +240,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         if(quantity.isEmpty()){
             editTextProductQuantity.setError("Musisz podać ilość");
             editTextProductQuantity.requestFocus();
+            return;
+        }
+
+        if(name.isEmpty()){
+            editTextProductName.setError("Produkt musi posiadać nazwę");
+            editTextProductName.requestFocus();
             return;
         }
 
@@ -280,7 +272,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             userUidLocation = currentUser + textLocation;
             query = databaseRefProducts.orderByChild("userUidBarcode").equalTo(userUidBarcode);
         }
-
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -293,46 +284,183 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                         barcodeSnapshot.getRef().child("quantity").setValue(intQuantityFb+"");
                         Toast.makeText(AddProductActivity.this, "Dodano "+ intQuantity +" produkt/ów o kodzie: " +"'" + barcode + "'",Toast.LENGTH_SHORT).show();
                         rejestrActivity();
-                        addLocation(1);
+                        addLocation();
                         clear();
                     }
                 }
                 else {
                     if(workerFb != null && workerFb.equals("true")){
-                        product = new Products(barcode, creatorUid,name,finalQuantity,textLocation, userUidBarcodeWorker,userUidProdutName,userUidLocation);
-                        rejestrActivity();
-                        addLocation(1);
-                        clear();
+                        if(imageUri != null){
+                            StorageReference fileRef = reference.child(System.currentTimeMillis()+"." + getFileExtension(imageUri));
+                            fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            uriSucces = uri.toString();
+                                            product = new Products(barcode, creatorUid,name,finalQuantity,textLocation, userUidBarcodeWorker,userUidProdutName,userUidLocation, uriSucces);
+                                            rejestrActivity();
+                                            addLocation();
+                                            clear();
+                                            imageView.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
+                                            imageUri = null;
+                                            uriSucces = "";
+
+                                            new FirebaseDatabaseHelper().addProduct(product, new FirebaseDatabaseHelper.DataStatus() {
+                                                @Override
+                                                public void DataIsLoaded(List<Products> productsList, List<String> keys) {
+
+                                                }
+
+                                                @Override
+                                                public void DataIsInserted() {
+                                                    Toast.makeText(AddProductActivity.this,"Nowy produkt dodano",Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void DataIsUpdated() {
+
+                                                }
+
+                                                @Override
+                                                public void DataIsDeleted() {
+
+                                                }
+                                            });
+                                            progressBar.setVisibility(View.GONE);
+                                            buttonAddProduct.setEnabled(true);
+                                        }
+                                    });
+                                }
+                            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    buttonAddProduct.setEnabled(false);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(AddProductActivity.this,"Niepowodzenie przy dodawaniu zdjęcia",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        else {
+                            product = new Products(barcode, creatorUid,name,finalQuantity,textLocation, userUidBarcodeWorker,userUidProdutName,userUidLocation, uriSucces);
+                            rejestrActivity();
+                            addLocation();
+                            clear();
+
+                            new FirebaseDatabaseHelper().addProduct(product, new FirebaseDatabaseHelper.DataStatus() {
+                                @Override
+                                public void DataIsLoaded(List<Products> productsList, List<String> keys) {
+
+                                }
+
+                                @Override
+                                public void DataIsInserted() {
+                                    Toast.makeText(AddProductActivity.this,"Nowy produkt dodano",Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void DataIsUpdated() {
+
+                                }
+
+                                @Override
+                                public void DataIsDeleted() {
+
+                                }
+                            });
+                        }
                     }
                     else{
-                        product = new Products(barcode, currentUser,name,finalQuantity,textLocation, userUidBarcode,userUidProdutName,userUidLocation);
-                        rejestrActivity();
-                        addLocation(1);
-                        clear();
+                        if(imageUri != null){
+                            StorageReference fileRef = reference.child(System.currentTimeMillis()+"." + getFileExtension(imageUri));
+                            fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            uriSucces = uri.toString();
+                                            product = new Products(barcode, currentUser,name,finalQuantity,textLocation, userUidBarcode,userUidProdutName,userUidLocation, uriSucces);
+                                            rejestrActivity();
+                                            addLocation();
+                                            clear();
+                                            imageView.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
+                                            imageUri = null;
+                                            uriSucces = "";
+
+                                            new FirebaseDatabaseHelper().addProduct(product, new FirebaseDatabaseHelper.DataStatus() {
+                                                @Override
+                                                public void DataIsLoaded(List<Products> productsList, List<String> keys) {
+
+                                                }
+
+                                                @Override
+                                                public void DataIsInserted() {
+                                                    Toast.makeText(AddProductActivity.this,"Nowy produkt dodano",Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void DataIsUpdated() {
+
+                                                }
+
+                                                @Override
+                                                public void DataIsDeleted() {
+
+                                                }
+                                            });
+                                            progressBar.setVisibility(View.GONE);
+                                            buttonAddProduct.setEnabled(true);
+                                        }
+                                    });
+                                }
+                            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    buttonAddProduct.setEnabled(false);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(AddProductActivity.this,"Niepowodzenie przy dodawaniu zdjęcia",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        else {
+                            product = new Products(barcode, currentUser,name,finalQuantity,textLocation, userUidBarcode,userUidProdutName,userUidLocation, uriSucces);
+                            rejestrActivity();
+                            addLocation();
+                            clear();
+
+                            new FirebaseDatabaseHelper().addProduct(product, new FirebaseDatabaseHelper.DataStatus() {
+                                @Override
+                                public void DataIsLoaded(List<Products> productsList, List<String> keys) {
+
+                                }
+
+                                @Override
+                                public void DataIsInserted() {
+                                    Toast.makeText(AddProductActivity.this,"Nowy produkt dodano",Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void DataIsUpdated() {
+
+                                }
+
+                                @Override
+                                public void DataIsDeleted() {
+
+                                }
+                            });
+                        }
                     }
-
-
-                    new FirebaseDatabaseHelper().addProduct(product, new FirebaseDatabaseHelper.DataStatus() {
-                        @Override
-                        public void DataIsLoaded(List<Products> productsList, List<String> keys) {
-
-                        }
-
-                        @Override
-                        public void DataIsInserted() {
-                            Toast.makeText(AddProductActivity.this,"Nowy produkt dodano",Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void DataIsUpdated() {
-
-                        }
-
-                        @Override
-                        public void DataIsDeleted() {
-
-                        }
-                    });
 
                 }
 
@@ -343,7 +471,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
+    }
 
+    private String getFileExtension(Uri mUri){
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(mUri));
     }
 
     private void clear(){
@@ -399,47 +532,28 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    public void showDataSpinner(){
-        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        databaseRefDelLocation.child("Location").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrayList.clear();
-                for(DataSnapshot item: snapshot.getChildren()){
-                    Location location = item.getValue(Location.class);
-                    String userUid = location.getUserUid();
-                    if(workerFb != null && workerFb.equals("true")){
-                        if(userUid != null && userUid.equals(creatorUid)){
-                            arrayList.add(location.getLocation());
-                        }
-                    }else{
-                        if(userUid != null && userUid.equals(currentUser)){
-                            arrayList.add(location.getLocation());
-                        }
-                    }
 
-                }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(AddProductActivity.this, R.layout.support_simple_spinner_dropdown_item ,arrayList);
-                spinner.setAdapter(arrayAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void scanning(){
-        verifyPermission();
-    }
-
-    private void verifyPermission(){
+    private void verifyPermission(int where){
         String[] permissions = {Manifest.permission.CAMERA};
         if(ContextCompat.checkSelfPermission(this.getApplicationContext(),permissions[0]) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,permissions,CAMERA_REQUEST_CODE);
         }else {
-            startActivity(new Intent(this, AddScanningActivity.class));
+            if(where == 0){
+                startActivity(new Intent(this, AddScanningActivity.class));
+            }
+            if(where == 1){
+                try{
+                    ContentValues values = new ContentValues();
+                    imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
+
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
+                }catch(Exception e){
+                    Toast.makeText(this,"Ta wersja Android wymaga użycia zewnętrznego aparatu",Toast.LENGTH_SHORT).show();
+                }
+
+            }
         }
     }
 
@@ -448,7 +562,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == CAMERA_REQUEST_CODE){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                startActivity(new Intent(this, AddScanningActivity.class));
+                //startActivity(new Intent(this, AddScanningActivity.class));
             }else{
                 Toast.makeText(this,"Skanowanie wymaga dostępu do kamery",Toast.LENGTH_SHORT).show();
             }

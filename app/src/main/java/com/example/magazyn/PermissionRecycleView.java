@@ -32,6 +32,7 @@ public class PermissionRecycleView {
         private Switch mAdd;
         private Switch mStock;
         private Switch mCollect;
+        private Switch mLocation;
 
         private String key, creatorUid, worker;
 
@@ -42,14 +43,16 @@ public class PermissionRecycleView {
             mAdd = (Switch) itemView.findViewById(R.id.switch_addProduct);
             mStock = (Switch) itemView.findViewById(R.id.switch_stockStatus);
             mCollect = (Switch) itemView.findViewById(R.id.switch_collect);
+            mLocation = (Switch) itemView.findViewById(R.id.switch_location);
             mAdd.setClickable(false);
             mStock.setClickable(false);
             mCollect.setClickable(false);
+            mLocation.setClickable(false);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String addStatus = "false", stockStatus ="false", collectStatus ="false";
+                    String addStatus = "false", stockStatus ="false", collectStatus ="false", locationStatus="false";
                     Intent intent = new Intent(mContext, PermissionDetailsActivity.class);
                     intent.putExtra("key",key);
                     intent.putExtra("email",mEmail.getText().toString());
@@ -65,6 +68,10 @@ public class PermissionRecycleView {
                         collectStatus = "true";
                     }
                     intent.putExtra("collect", collectStatus);
+                    if(mLocation.isChecked()){
+                        locationStatus = "true";
+                    }
+                    intent.putExtra("location", locationStatus);
 
                     intent.putExtra("worker", worker);
                     intent.putExtra("creatorUid", creatorUid);
@@ -76,7 +83,7 @@ public class PermissionRecycleView {
 
         public void bind(Workers workers, String key){
             mEmail.setText(workers.getEmail());
-            String add, stock, collect;
+            String add, stock, collect,location;
             add = workers.getPermissionAdd();
             if(add.equals("true")){
                 mAdd.setChecked(true);
@@ -95,6 +102,13 @@ public class PermissionRecycleView {
             }else{
                 mCollect.setChecked(false);
             }
+            location = workers.getPermissionLocation();
+            if(location.equals("true")){
+                mLocation.setChecked(true);
+            }else{
+                mLocation.setChecked(false);
+            }
+
             worker = workers.getWorker();
             creatorUid = workers.getCreatorUid();
 

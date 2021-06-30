@@ -17,10 +17,10 @@ import java.util.List;
 public class PermissionDetailsActivity extends AppCompatActivity {
 
     private TextView editTextEmail;
-    private Switch aSwitchAdd, aSwitchStock, aSwitchCollect;
+    private Switch aSwitchAdd, aSwitchStock, aSwitchCollect, aSwitchLocation;
     private Button buttonUpdate;
 
-    private String key, email, switchAddStatus, swtichStockStatus, swtichCollectStatus, worker, creatorUid;
+    private String key, email, switchAddStatus, swtichStockStatus, swtichCollectStatus, swtichLocationStatus, worker, creatorUid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +31,7 @@ public class PermissionDetailsActivity extends AppCompatActivity {
         switchAddStatus = getIntent().getStringExtra("add");
         swtichStockStatus = getIntent().getStringExtra("stock");
         swtichCollectStatus = getIntent().getStringExtra("collect");
+        swtichLocationStatus = getIntent().getStringExtra("location");
         worker = getIntent().getStringExtra("worker");
         creatorUid = getIntent().getStringExtra("creatorUid");
 
@@ -48,6 +49,11 @@ public class PermissionDetailsActivity extends AppCompatActivity {
         if(swtichCollectStatus.equals("true")){
             aSwitchCollect.setChecked(true);
         }
+        aSwitchLocation = (Switch) findViewById(R.id.switch_location_details);
+        if(swtichLocationStatus.equals("true")){
+            aSwitchLocation.setChecked(true);
+        }
+
         buttonUpdate = (Button) findViewById(R.id.button_permissionDetails);
 
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +63,7 @@ public class PermissionDetailsActivity extends AppCompatActivity {
                 workers.setPermissionAdd(switchAddStatus);
                 workers.setPermissionStockStatus(swtichStockStatus);
                 workers.setPermissionCollect(swtichCollectStatus);
+                workers.setPermissionLocation(swtichLocationStatus);
                 workers.setEmail(email);
                 workers.setCreatorUid(creatorUid);
                 workers.setWorker(worker);
@@ -111,6 +118,18 @@ public class PermissionDetailsActivity extends AppCompatActivity {
                 }
                 else{
                     swtichCollectStatus = "false";
+                }
+            }
+        });
+
+        aSwitchLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked == true){
+                    swtichLocationStatus = "true";
+                }
+                else{
+                    swtichLocationStatus = "false";
                 }
             }
         });

@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="60dp"
         android:id="@+id/recyclerview_produkty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,19 +43,19 @@
         android:id="@+id/imageButton_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.647"
+        app:layout_constraintHorizontal_bias="0.605"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_search" />
 
     <EditText
         android:id="@+id/editTextSearch"
-        android:layout_width="202dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_width="181dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Wyszukaj produkt"
@@ -67,8 +67,8 @@
 
     <Spinner
         android:id="@+id/spinner_search"
-        android:layout_width="133dp"
-        android:layout_height="52dp"
+        android:layout_width="119dp"
+        android:layout_height="51dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.695"

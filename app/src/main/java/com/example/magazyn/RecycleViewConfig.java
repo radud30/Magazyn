@@ -6,11 +6,15 @@ import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -28,6 +32,7 @@ public class RecycleViewConfig {
 
     class ProduktyItemView extends RecyclerView.ViewHolder{
         private TextView textViewBarcode, textViewName, textViewQuantity, textViewLocation;
+        private ImageView imageView;
         private String key;
 
         public ProduktyItemView(ViewGroup parent){
@@ -36,6 +41,7 @@ public class RecycleViewConfig {
             textViewName = (TextView) itemView.findViewById(R.id.textView_nazwa);
             textViewQuantity = (TextView) itemView.findViewById(R.id.textView_ilosc);
             textViewLocation = (TextView) itemView.findViewById(R.id.textView_location);
+            imageView = (ImageView) itemView.findViewById(R.id.imageViewItem);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,7 +64,19 @@ public class RecycleViewConfig {
             textViewBarcode.setText(products.getBarcode());
             textViewName.setText(products.getProductName());
             textViewQuantity.setText(products.getQuantity());
-            textViewLocation.setText(products.getLocation());
+            if(!products.getLocation().equals("")){
+                textViewLocation.setText(products.getLocation());
+            }
+            else{
+                textViewLocation.setText("---");
+            }
+
+            if(!products.getImageUrl().equals("")){
+                Picasso.get().load(products.getImageUrl()).fit().placeholder(R.drawable.progress_animation).into(imageView);
+            }
+            else{
+                imageView.setVisibility(View.GONE);
+            }
             this.key = key;
 
         }

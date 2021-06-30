@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar progressBar;
     private DatabaseReference mReferenceWorker;
     private Query queryWorker;
-    private String workerFb, permissionAddFb, permissionStockStatusFb, permissionCollectFb;
+    private String workerFb, permissionAddFb, permissionStockStatusFb, permissionCollectFb,permissionLocationFb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_login:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
-                userLogin();
+                try {
+                    userLogin();
+                }
+                catch (Exception e){
+                    Toast.makeText(MainActivity.this, "Niepowodzenie przy logowaniu", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    System.exit(0);
+                }
                 break;
             case R.id.textView_forgotpass:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
@@ -127,11 +134,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     permissionAddFb = snapshot.child("permissionAdd").getValue().toString();
                                     permissionStockStatusFb = snapshot.child("permissionStockStatus").getValue().toString();
                                     permissionCollectFb = snapshot.child("permissionCollect").getValue().toString();
+                                    permissionLocationFb = snapshot.child("permissionLocation").getValue().toString();
                                     Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                                     intent.putExtra("EXTRA_WORKER_FB", workerFb);
                                     intent.putExtra("EXTRA_PERMISSION_ADD_FB", permissionAddFb);
                                     intent.putExtra("EXTRA_PERMISSION_STOCK_FB", permissionStockStatusFb);
                                     intent.putExtra("EXTRA_PERMISSION_COLLECT_FB",permissionCollectFb);
+                                    intent.putExtra("EXTRA_PERMISSION_LOCATION_FB", permissionLocationFb);
                                     startActivity(intent);
                                 }
                                 else {

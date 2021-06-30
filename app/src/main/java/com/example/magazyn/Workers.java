@@ -7,18 +7,20 @@ public class Workers {
     public String permissionAdd;
     public String permissionStockStatus;
     public String permissionCollect;
+    public String permissionLocation;
 
     public Workers(){
 
     }
 
-    public Workers(String email, String creatorUid, String worker, String permissionAdd, String permissionStockStatus, String permissionCollect) {
+    public Workers(String email, String creatorUid, String worker, String permissionAdd, String permissionStockStatus, String permissionCollect, String permissionLocation) {
         this.email = email;
         this.creatorUid = creatorUid;
         this.worker = worker;
         this.permissionAdd = permissionAdd;
         this.permissionStockStatus = permissionStockStatus;
         this.permissionCollect = permissionCollect;
+        this.permissionLocation = permissionLocation;
 
     }
 
@@ -71,4 +73,11 @@ public class Workers {
         this.permissionCollect = permissionCollect;
     }
 
+    public String getPermissionLocation() {
+        return permissionLocation;
+    }
+
+    public void setPermissionLocation(String permissionLocation) {
+        this.permissionLocation = permissionLocation;
+    }
 }
