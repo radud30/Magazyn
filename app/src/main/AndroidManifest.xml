@@ -3,9 +3,12 @@
     package="com.example.magazyn">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
 
     <application
         android:allowBackup="true"
@@ -13,7 +16,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Magazyn">
+        android:theme="@style/Theme.Magazyn"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".LocationActivity"
             android:screenOrientation="portrait"></activity>

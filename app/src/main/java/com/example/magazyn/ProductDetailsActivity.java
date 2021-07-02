@@ -451,7 +451,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     }
 
     private void rejestrActivityDelete(){
-        String noteActivity = "usunął produkt o kodzie '" + barcode +"' ";
+        String noteActivity = "usunął ze stanu produkt o kodzie '" + barcode +"' ";
         Date currentTime = Calendar.getInstance().getTime();
         if(workerFb != null && workerFb.equals("true")){
             activity = new Activity(noteActivity,creatorUid, currentTime+"", workerEmailFb);
@@ -571,7 +571,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 startActivity(new Intent(this, EditScanningActivity.class));
             }else{
-                Toast.makeText(this,"Skanowanie wymaga dostępu do kamery",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Skanowanie i robienie zdjęć wymaga dostępu do kamery",Toast.LENGTH_SHORT).show();
             }
         }
     }

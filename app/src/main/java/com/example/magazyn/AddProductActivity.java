@@ -564,7 +564,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 //startActivity(new Intent(this, AddScanningActivity.class));
             }else{
-                Toast.makeText(this,"Skanowanie wymaga dostępu do kamery",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Skanowanie i robienie zdjęć wymaga dostępu do kamery",Toast.LENGTH_SHORT).show();
             }
         }
     }
