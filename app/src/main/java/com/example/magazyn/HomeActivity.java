@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -32,7 +33,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         permissionStockStatusExtra = getIntent().getStringExtra("EXTRA_PERMISSION_STOCK_FB");
         permissionCollectExtra = getIntent().getStringExtra("EXTRA_PERMISSION_COLLECT_FB");
         permissionLocationExtra = getIntent().getStringExtra("EXTRA_PERMISSION_LOCATION_FB");
-        //Log.d("MyTag", permissionExtra +"");
+        Log.d("MyTag", permissionLocationExtra +"");
 
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(this);
@@ -58,7 +59,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         buttonLocation = (Button) findViewById(R.id.buttonLocation);
         buttonLocation.setOnClickListener(this);
         if(permissionLocationExtra != null && permissionLocationExtra.equals("false")){
-            buttonCollect.setEnabled(false);
+            buttonLocation.setEnabled(false);
         }
 
         buttonWorker = (Button) findViewById(R.id.buttonWorker);

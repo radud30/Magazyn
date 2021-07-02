@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/quantity"
-        android:maxLength="10"
+        android:maxLength="4"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

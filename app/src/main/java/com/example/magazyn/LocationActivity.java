@@ -83,6 +83,7 @@ public class LocationActivity extends AppCompatActivity {
                 enable = false;
                 imageView.setVisibility(View.VISIBLE);
                 buttonOff();
+                imageButtonChange.setClickable(true);
             }
         });
 
@@ -184,6 +185,7 @@ public class LocationActivity extends AppCompatActivity {
                                 buttonOff();
                             }else{
                                 buttonOn();
+                                imageButtonChange.setClickable(false);
                             }
                         }
 
@@ -219,6 +221,7 @@ public class LocationActivity extends AppCompatActivity {
                     }
                     else {
                         buttonOn();
+                        imageButtonChange.setClickable(false);
                     }
                 }
             }
