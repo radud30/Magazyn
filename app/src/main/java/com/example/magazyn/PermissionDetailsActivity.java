@@ -3,11 +3,9 @@ package com.example.magazyn;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,26 +33,26 @@ public class PermissionDetailsActivity extends AppCompatActivity {
         worker = getIntent().getStringExtra("worker");
         creatorUid = getIntent().getStringExtra("creatorUid");
 
-        editTextEmail = (TextView) findViewById(R.id.textView_email_details);
+        editTextEmail = (TextView) findViewById(R.id.textViewEmailDetails);
         editTextEmail.setText(email);
-        aSwitchAdd = (Switch) findViewById(R.id.switch_add_details);
+        aSwitchAdd = (Switch) findViewById(R.id.switchAddDetails);
         if(switchAddStatus.equals("true")){
             aSwitchAdd.setChecked(true);
         }
-        aSwitchStock = (Switch) findViewById(R.id.switch_stock_details);
+        aSwitchStock = (Switch) findViewById(R.id.switchStockDetails);
         if(swtichStockStatus.equals("true")){
             aSwitchStock.setChecked(true);
         }
-        aSwitchCollect= (Switch) findViewById(R.id.switch_collect_details);
+        aSwitchCollect= (Switch) findViewById(R.id.switchCollectDetails);
         if(swtichCollectStatus.equals("true")){
             aSwitchCollect.setChecked(true);
         }
-        aSwitchLocation = (Switch) findViewById(R.id.switch_location_details);
+        aSwitchLocation = (Switch) findViewById(R.id.switchLocationDetails);
         if(swtichLocationStatus.equals("true")){
             aSwitchLocation.setChecked(true);
         }
 
-        buttonUpdate = (Button) findViewById(R.id.button_permissionDetails);
+        buttonUpdate = (Button) findViewById(R.id.buttonPermissionDetails);
 
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override

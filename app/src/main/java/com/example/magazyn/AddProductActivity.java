@@ -11,15 +11,12 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -27,8 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -86,18 +81,18 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         reference = FirebaseStorage.getInstance().getReference();
 
-        editTextProductName = (EditText) findViewById(R.id.editTextTextPersonName_nazwapr);
-        editTextProductQuantity = (EditText) findViewById(R.id.editTextNumber2_ilosc);
-        editTextProductBarcode = (EditText) findViewById(R.id.editText_kodpr);
-        autoCompleteLocation = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_localization);
+        editTextProductName = (EditText) findViewById(R.id.editTextTextPersonNameName);
+        editTextProductQuantity = (EditText) findViewById(R.id.editTextNumberQuantity);
+        editTextProductBarcode = (EditText) findViewById(R.id.editTextBarcode);
+        autoCompleteLocation = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewLocation);
 
         imageView = (ImageView) findViewById(R.id.imageView);
         imageView.setOnClickListener(this);
 
-        buttonAddProduct = (Button) findViewById(R.id.button_dodajprod);
+        buttonAddProduct = (Button) findViewById(R.id.buttonAddProd);
         buttonAddProduct.setOnClickListener(this);
 
-        imageButtonCamera = (ImageButton) findViewById(R.id.imageButton_camera);
+        imageButtonCamera = (ImageButton) findViewById(R.id.imageButtonCamera);
         imageButtonCamera.setOnClickListener(this);
 
         imageButtonPhoto = (ImageButton) findViewById(R.id.imageButtonPhoto);
@@ -148,12 +143,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_dodajprod:
+            case R.id.buttonAddProd:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 addProduct();
                 break;
-            case R.id.imageButton_camera:
+            case R.id.imageButtonCamera:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 verifyPermission(0);

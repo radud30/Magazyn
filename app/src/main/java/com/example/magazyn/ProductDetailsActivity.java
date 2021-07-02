@@ -17,7 +17,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
@@ -82,19 +81,19 @@ public class ProductDetailsActivity extends AppCompatActivity {
         quantity = getIntent().getStringExtra("quantity");
         location = getIntent().getStringExtra("location");
 
-        editTextProductName = (EditText) findViewById(R.id.editTextTextPersonName_nazwa);
+        editTextProductName = (EditText) findViewById(R.id.editTextTextPersonNameNa);
         editTextProductName.setText(name);
-        editTextProductQuantity = (EditText) findViewById(R.id.editTextNumber_ilosc);
+        editTextProductQuantity = (EditText) findViewById(R.id.editTextNumberQua);
         editTextProductQuantity.setText(quantity);
-        editTextProductBarcode = (EditText) findViewById(R.id.editTextNumber_kod);
+        editTextProductBarcode = (EditText) findViewById(R.id.editTextNumberBar);
         editTextProductBarcode.setText(barcode);
-        autoCompleteTextViewLocation = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_editLocation);
+        autoCompleteTextViewLocation = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewEditLocation);
         autoCompleteTextViewLocation.setText(location);
         imageView = (ImageView) findViewById(R.id.imageView2);
         progressBar = (ProgressBar) findViewById(R.id.progressBarEdit);
 
-        buttonUpdate = (Button) findViewById(R.id.button_update);
-        buttonDelete = (Button) findViewById(R.id.button_usun);
+        buttonUpdate = (Button) findViewById(R.id.buttonUpdate);
+        buttonDelete = (Button) findViewById(R.id.buttonDel);
         imageButtonCamera = (ImageButton) findViewById(R.id.imageButton2_camera);
         imageButtonDel = (ImageButton) findViewById(R.id.imageButtonDelPhoto);
         imageButtonPhoto = (ImageButton) findViewById(R.id.imageButtonCam);

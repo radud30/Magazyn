@@ -7,24 +7,24 @@
     tools:context=".AddProductActivity">
 
     <EditText
-        android:id="@+id/editTextTextPersonName_nazwapr"
+        android:id="@+id/editTextTextPersonNameName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Nazwa produktu"
+        android:hint="@string/productName"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.437"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_kodpr"
+        app:layout_constraintTop_toBottomOf="@+id/editTextBarcode"
         app:layout_constraintVertical_bias="0.027" />
 
     <Button
-        android:id="@+id/button_dodajprod"
+        android:id="@+id/buttonAddProd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dodaj produkt"
+        android:text="@string/addProduct"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,26 +32,26 @@
         app:layout_constraintVertical_bias="0.692" />
 
     <EditText
-        android:id="@+id/editTextNumber2_ilosc"
+        android:id="@+id/editTextNumberQuantity"
         android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Ilość"
+        android:hint="@string/quantity"
         android:inputType="number"
-        android:text="1"
+        android:text="@string/one"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName_nazwapr"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonNameName"
         app:layout_constraintVertical_bias="0.032" />
 
     <EditText
-        android:id="@+id/editText_kodpr"
+        android:id="@+id/editTextBarcode"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Kod produktu"
+        android:hint="@string/productBarcode"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,13 +61,13 @@
         app:layout_constraintVertical_bias="0.083" />
 
     <ImageButton
-        android:id="@+id/imageButton_camera"
+        android:id="@+id/imageButtonCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.344"
-        app:layout_constraintStart_toEndOf="@+id/editText_kodpr"
+        app:layout_constraintStart_toEndOf="@+id/editTextBarcode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.075"
         app:srcCompat="@android:drawable/ic_menu_camera" />
@@ -76,20 +76,20 @@
         android:id="@+id/textView"
         android:layout_width="70dp"
         android:layout_height="46dp"
-        android:text="Ilość:"
+        android:text="@string/quantityColon"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/editTextNumber2_ilosc"
+        app:layout_constraintEnd_toStartOf="@+id/editTextNumberQuantity"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName_nazwapr"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonNameName"
         app:layout_constraintVertical_bias="0.045" />
 
     <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView_localization"
+        android:id="@+id/autoCompleteTextViewLocation"
         android:layout_width="194dp"
         android:layout_height="44dp"
-        android:hint="Lokalizacja"
+        android:hint="@string/location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.419"
@@ -105,7 +105,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.408"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView_localization"
+        app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextViewLocation"
         app:layout_constraintVertical_bias="0.218"
         app:srcCompat="@drawable/ic_baseline_add_photo_alternate_24" />
 
@@ -125,12 +125,12 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dodaj zdjęcie:"
+        android:text="@string/addPhoto"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.28"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView_localization"
+        app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextViewLocation"
         app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar
@@ -140,7 +140,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/button_dodajprod"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAddProd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

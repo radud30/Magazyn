@@ -7,11 +7,11 @@
     tools:context=".HomeActivity">
 
     <Button
-        android:id="@+id/button_logout"
+        android:id="@+id/buttonLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Wyloguj się"
+        android:text="@string/logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,20 +19,20 @@
         app:layout_constraintVertical_bias="0.915" />
 
     <Button
-        android:id="@+id/button_dodaj"
+        android:id="@+id/buttonAdd"
         android:layout_width="130dp"
         android:layout_height="115dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="50dp"
-        android:text="Dodaj na stan"
+        android:text="@string/addProductToStock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_sprawdz"
+        android:id="@+id/buttonStockStatus"
         android:layout_width="130dp"
         android:layout_height="115dp"
         android:layout_marginStart="20dp"
@@ -40,14 +40,14 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:text="Sprawdz stan"
+        android:text="@string/CheckStock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/button_dodaj"
+        app:layout_constraintStart_toEndOf="@+id/buttonAdd"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_zbieraj"
+        android:id="@+id/buttonCollect"
         android:layout_width="130dp"
         android:layout_height="115dp"
         android:layout_marginStart="20dp"
@@ -55,14 +55,14 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:text="Zdjęcie ze stanu"
+        android:text="@string/collectStock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_dodaj" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonAdd" />
 
     <Button
-        android:id="@+id/button_pracownik"
+        android:id="@+id/buttonWorker"
         android:layout_width="130dp"
         android:layout_height="115dp"
         android:layout_marginStart="20dp"
@@ -70,7 +70,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:text="Pracownik"
+        android:text="@string/worker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,12 +85,12 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:text="Rejestr aktywności"
+        android:text="@string/registerActivity"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_zbieraj" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonCollect" />
 
     <Button
         android:id="@+id/buttonLocation"
@@ -101,10 +101,10 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:text="Lokalizacja"
+        android:text="@string/location"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/button_zbieraj"
-        app:layout_constraintTop_toBottomOf="@+id/button_sprawdz" />
+        app:layout_constraintStart_toEndOf="@+id/buttonCollect"
+        app:layout_constraintTop_toBottomOf="@+id/buttonStockStatus" />
 </androidx.constraintlayout.widget.ConstraintLayout>

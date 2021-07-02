@@ -26,7 +26,7 @@ public class WorkerStockStatusActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_stock_status);
-        mRecyclerView = (RecyclerView) findViewById(R.id.racycleView_workerProducts);
+        mRecyclerView = (RecyclerView) findViewById(R.id.racycleViewWorkerProducts);
 
         new WorkerFirebaseDatabaseHelper().readProducts("","",new WorkerFirebaseDatabaseHelper.DataStatus() {
             @Override
@@ -36,9 +36,9 @@ public class WorkerStockStatusActivity extends AppCompatActivity {
             }
         });
 
-        searchEditText = (EditText) findViewById(R.id.editText_WorkerSearch);
+        searchEditText = (EditText) findViewById(R.id.editTextWorkerSearch);
 
-        spinner = (Spinner) findViewById(R.id.spinner_searchWorker);
+        spinner = (Spinner) findViewById(R.id.spinnerSearchWorker);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinerSearch, R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -55,7 +55,7 @@ public class WorkerStockStatusActivity extends AppCompatActivity {
             }
         });
 
-        imageButton = (ImageButton) findViewById(R.id.imageButton_WorkerSearch);
+        imageButton = (ImageButton) findViewById(R.id.imageButtonWorkerSearch);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

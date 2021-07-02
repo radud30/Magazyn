@@ -7,11 +7,11 @@
     tools:context=".ProductDetailsActivity">
 
     <EditText
-        android:id="@+id/editTextNumber_kod"
+        android:id="@+id/editTextNumberBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Kod produktu"
+        android:hint="@string/productBarcode"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,44 +21,44 @@
         app:layout_constraintVertical_bias="0.08" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName_nazwa"
+        android:id="@+id/editTextTextPersonNameNa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:hint="Nazwa produktu"
+        android:hint="@string/productName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber_kod"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberBar"
         app:layout_constraintVertical_bias="0.065" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ilość:"
-        android:textSize="24dp"
+        android:text="@string/quantityColon"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.282"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName_nazwa"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonNameNa"
         app:layout_constraintVertical_bias="0.079" />
 
     <EditText
-        android:id="@+id/editTextNumber_ilosc"
+        android:id="@+id/editTextNumberQua"
         android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Ilość"
+        android:hint="@string/quantity"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName_nazwa"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonNameNa"
         app:layout_constraintVertical_bias="0.052" />
 
     <ImageButton
@@ -70,52 +70,52 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumber_kod"
+        app:layout_constraintStart_toEndOf="@+id/editTextNumberBar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.08"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <Button
-        android:id="@+id/button_update"
+        android:id="@+id/buttonUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="472dp"
-        android:text="Uaktualnij produkt"
+        android:text="@string/updateProduct"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_usun"
+        android:id="@+id/buttonDel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Usuń produkt"
+        android:text="@string/deleteProduct"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_update"
+        app:layout_constraintTop_toBottomOf="@+id/buttonUpdate"
         app:layout_constraintVertical_bias="0.0" />
 
     <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView_editLocation"
-        android:layout_width="wrap_content"
+        android:id="@+id/autoCompleteTextViewEditLocation"
+        android:layout_width="194dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:hint="Lokalizacja produktu"
+        android:hint="@string/location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.42"
+        app:layout_constraintHorizontal_bias="0.46"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber_ilosc"
-        app:layout_constraintVertical_bias="0.008" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberQua"
+        app:layout_constraintVertical_bias="0.004" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="101dp"
         android:layout_height="111dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_update"
+        app:layout_constraintBottom_toTopOf="@+id/buttonUpdate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.322"
         app:layout_constraintStart_toStartOf="parent"
@@ -157,7 +157,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.63"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView_editLocation"
+        app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextViewEditLocation"
         app:layout_constraintVertical_bias="0.13"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
@@ -165,7 +165,7 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Zdjęcie"
+        android:text="@string/photo"
         app:layout_constraintBottom_toTopOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.273"

@@ -7,7 +7,7 @@
     tools:context=".WorkerStockStatusActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/racycleView_workerProducts"
+        android:id="@+id/racycleViewWorkerProducts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
@@ -27,10 +27,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_WorkerSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextWorkerSearch" />
 
     <ImageButton
-        android:id="@+id/imageButton_WorkerSearch"
+        android:id="@+id/imageButtonWorkerSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -41,27 +41,27 @@
         app:srcCompat="@android:drawable/ic_menu_search" />
 
     <EditText
-        android:id="@+id/editText_WorkerSearch"
+        android:id="@+id/editTextWorkerSearch"
         android:layout_width="160dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Wyszukaj produkt"
+        android:hint="@string/searchProduct"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton_WorkerSearch"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonWorkerSearch"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner_searchWorker"
+        android:id="@+id/spinnerSearchWorker"
         android:layout_width="101dp"
         android:layout_height="38dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton_WorkerSearch"
+        app:layout_constraintStart_toEndOf="@+id/imageButtonWorkerSearch"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
@@ -70,8 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/racycleView_workerProducts"
-        app:layout_constraintEnd_toEndOf="@+id/racycleView_workerProducts"
+        app:layout_constraintBottom_toBottomOf="@+id/racycleViewWorkerProducts"
+        app:layout_constraintEnd_toEndOf="@+id/racycleViewWorkerProducts"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

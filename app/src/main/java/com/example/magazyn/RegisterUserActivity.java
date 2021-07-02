@@ -34,14 +34,14 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
 
         mAuth = FirebaseAuth.getInstance();
 
-        ButtonRegisterUser = (Button) findViewById(R.id.button_zarejestruj);
+        ButtonRegisterUser = (Button) findViewById(R.id.buttonRegister);
         ButtonRegisterUser.setOnClickListener(this);
 
-        editTextName = (EditText) findViewById(R.id.editTextTextPersonName_name);
-        editTextAge = (EditText) findViewById(R.id.editTextNumber_age);
-        editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddress2_mail);
-        editTextPassword = (EditText) findViewById(R.id.editTextTextPassword2_pass);
-        editTextRepeatPassword = (EditText) findViewById(R.id.editTextTextPassword_re);
+        editTextName = (EditText) findViewById(R.id.editTextTextPersonNameUsName);
+        editTextAge = (EditText) findViewById(R.id.editTextNumberAge);
+        editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddressEmail);
+        editTextPassword = (EditText) findViewById(R.id.editTextTextPasswordPass);
+        editTextRepeatPassword = (EditText) findViewById(R.id.editTextTextPasswordRe);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -50,7 +50,7 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_zarejestruj:
+            case R.id.buttonRegister:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 registerUser();

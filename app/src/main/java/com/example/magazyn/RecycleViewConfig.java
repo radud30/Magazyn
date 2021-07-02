@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -37,10 +36,10 @@ public class RecycleViewConfig {
 
         public ProduktyItemView(ViewGroup parent){
             super(LayoutInflater.from(mContext).inflate(R.layout.product_list_item,parent,false));
-            textViewBarcode = (TextView) itemView.findViewById(R.id.textView_kod);
-            textViewName = (TextView) itemView.findViewById(R.id.textView_nazwa);
-            textViewQuantity = (TextView) itemView.findViewById(R.id.textView_ilosc);
-            textViewLocation = (TextView) itemView.findViewById(R.id.textView_location);
+            textViewBarcode = (TextView) itemView.findViewById(R.id.textViewCode);
+            textViewName = (TextView) itemView.findViewById(R.id.textViewName);
+            textViewQuantity = (TextView) itemView.findViewById(R.id.textViewQuan);
+            textViewLocation = (TextView) itemView.findViewById(R.id.textViewLocation);
             imageView = (ImageView) itemView.findViewById(R.id.imageViewItem);
 
             itemView.setOnClickListener(new View.OnClickListener() {

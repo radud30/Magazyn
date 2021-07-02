@@ -1,15 +1,12 @@
 package com.example.magazyn;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,11 +36,11 @@ public class PermissionRecycleView {
         public PermissionItemView(ViewGroup parent){
             super(LayoutInflater.from(mContext).inflate(R.layout.permission_item,parent,false));
 
-            mEmail = (TextView) itemView.findViewById(R.id.email_text);
-            mAdd = (Switch) itemView.findViewById(R.id.switch_addProduct);
-            mStock = (Switch) itemView.findViewById(R.id.switch_stockStatus);
-            mCollect = (Switch) itemView.findViewById(R.id.switch_collect);
-            mLocation = (Switch) itemView.findViewById(R.id.switch_location);
+            mEmail = (TextView) itemView.findViewById(R.id.emailText);
+            mAdd = (Switch) itemView.findViewById(R.id.switchAddProduct);
+            mStock = (Switch) itemView.findViewById(R.id.switchStockStatus);
+            mCollect = (Switch) itemView.findViewById(R.id.switchCollect);
+            mLocation = (Switch) itemView.findViewById(R.id.switchLocation);
             mAdd.setClickable(false);
             mStock.setClickable(false);
             mCollect.setClickable(false);

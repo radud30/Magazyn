@@ -41,10 +41,10 @@
         android:layout_width="121dp"
         android:layout_height="55dp"
         android:layout_marginTop="4dp"
-        android:text="Aktywność pracownika:"
-        android:textSize="18dp"
+        android:text="@string/workerActivity"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/spinnerWorker"
-        app:layout_constraintHorizontal_bias="0.702"
+        app:layout_constraintHorizontal_bias="0.705"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

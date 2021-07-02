@@ -41,12 +41,12 @@ public class AddWorkerActivity extends AppCompatActivity implements View.OnClick
         mAuth = FirebaseAuth.getInstance();
         creatorUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        buttonAddWorker = (Button) findViewById(R.id.button_zarejestrujPracownika);
+        buttonAddWorker = (Button) findViewById(R.id.buttonRegWorker);
         buttonAddWorker.setOnClickListener(this);
 
-        editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddress_mailprac);
-        editTextPassword = (EditText) findViewById(R.id.editTextTextPassword_haslo);
-        editTextRepeatPassword = (EditText) findViewById(R.id.editTextTextPassword_powhaslo);
+        editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddressWorkerEmail);
+        editTextPassword = (EditText) findViewById(R.id.editTextTextPasswordWorkerPass);
+        editTextRepeatPassword = (EditText) findViewById(R.id.editTextTextPasswordReWorkerPass);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar4);
         spinner = (Spinner) findViewById(R.id.spinnerPermission);
@@ -70,7 +70,7 @@ public class AddWorkerActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_zarejestrujPracownika:
+            case R.id.buttonRegWorker:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 registerWorker();

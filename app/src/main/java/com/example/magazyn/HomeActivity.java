@@ -10,18 +10,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int CAMERA_REQUEST_CODE = 10;
@@ -41,22 +34,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         permissionLocationExtra = getIntent().getStringExtra("EXTRA_PERMISSION_LOCATION_FB");
         //Log.d("MyTag", permissionExtra +"");
 
-        buttonLogout = (Button) findViewById(R.id.button_logout);
+        buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(this);
 
-        buttonAdd = (Button) findViewById(R.id.button_dodaj);
+        buttonAdd = (Button) findViewById(R.id.buttonAdd);
         buttonAdd.setOnClickListener(this);
         if(permissionAddExtra != null && permissionAddExtra.equals("false")){
             buttonAdd.setEnabled(false);
         }
 
-        buttonStockStatus = (Button) findViewById(R.id.button_sprawdz);
+        buttonStockStatus = (Button) findViewById(R.id.buttonStockStatus);
         buttonStockStatus.setOnClickListener(this);
         if(permissionStockStatusExtra != null && permissionStockStatusExtra.equals("false")){
             buttonStockStatus.setEnabled(false);
         }
 
-        buttonCollect = (Button) findViewById(R.id.button_zbieraj);
+        buttonCollect = (Button) findViewById(R.id.buttonCollect);
         buttonCollect.setOnClickListener(this);
         if(permissionCollectExtra != null && permissionCollectExtra.equals("false")){
             buttonCollect.setEnabled(false);
@@ -68,7 +61,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             buttonCollect.setEnabled(false);
         }
 
-        buttonWorker = (Button) findViewById(R.id.button_pracownik);
+        buttonWorker = (Button) findViewById(R.id.buttonWorker);
         buttonWorker.setOnClickListener(this);
         if(workerExtra != null && workerExtra.equals("true")){
             buttonWorker.setVisibility(View.GONE);
@@ -85,12 +78,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_dodaj:
+            case R.id.buttonAdd:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(HomeActivity.this, AddProductActivity.class));
                 break;
-            case R.id.button_sprawdz:
+            case R.id.buttonStockStatus:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if(workerExtra != null && workerExtra.equals("true")){
@@ -100,11 +93,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(new Intent(HomeActivity.this, StockStatusActivity.class));
                 }
                 break;
-            case R.id.button_zbieraj:
+            case R.id.buttonCollect:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 verifyPermission();
-            case R.id.button_pracownik:
+            case R.id.buttonWorker:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(HomeActivity.this, WorkerActivity.class));
@@ -119,7 +112,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(HomeActivity.this, LocationActivity.class));
                 break;
-            case R.id.button_logout:
+            case R.id.buttonLogout:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 FirebaseAuth.getInstance().signOut();

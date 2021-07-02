@@ -25,7 +25,7 @@ public class StockStatusActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_status);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_produkty);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerviewProducts);
         new FirebaseDatabaseHelper().readProducts("","",new FirebaseDatabaseHelper.DataStatus() {
             @Override
             public void DataIsLoaded(List<Products> productsList, List<String> keys) {
@@ -51,7 +51,7 @@ public class StockStatusActivity extends AppCompatActivity {
 
         searchEditText = (EditText) findViewById(R.id.editTextSearch);
 
-        spinner = (Spinner) findViewById(R.id.spinner_search);
+        spinner = (Spinner) findViewById(R.id.spinnerSearch);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinerSearch, R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -68,7 +68,7 @@ public class StockStatusActivity extends AppCompatActivity {
             }
         });
 
-        imageButton = (ImageButton) findViewById(R.id.imageButton_search);
+        imageButton = (ImageButton) findViewById(R.id.imageButtonSearch);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

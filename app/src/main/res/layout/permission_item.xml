@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:text="mail@gmail.com"
                 android:textStyle="bold"
-                android:id="@+id/email_text"
+                android:id="@+id/emailText"
                 android:textSize="15dp"
                 android:layout_marginLeft="10dp" />
 
@@ -48,15 +48,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dodawanie produktów: "
+                android:text="@string/addProductsColon"
                 android:textStyle="bold"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_marginLeft="5dp"/>
 
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/switch_addProduct"/>
+                android:id="@+id/switchAddProduct"/>
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -70,15 +70,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stan produktów: "
+                android:text="@string/stockStatusColon"
                 android:textStyle="bold"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_marginLeft="5dp"/>
 
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/switch_stockStatus"/>
+                android:id="@+id/switchStockStatus"/>
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -92,15 +92,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Zbieranie produktów: "
+                android:text="@string/collectProductsColon"
                 android:textStyle="bold"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_marginLeft="5dp"/>
 
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/switch_collect"/>
+                android:id="@+id/switchCollect"/>
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -114,15 +114,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lokalizacja: "
+                android:text="@string/locationColon"
                 android:textStyle="bold"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_marginLeft="5dp"/>
 
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/switch_location"/>
+                android:id="@+id/switchLocation"/>
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>

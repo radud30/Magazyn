@@ -7,10 +7,10 @@
     tools:context=".WorkerActivity">
 
     <Button
-        android:id="@+id/button_dodajprac"
+        android:id="@+id/buttonAddWorker"
         android:layout_width="208dp"
         android:layout_height="64dp"
-        android:text="Dodaj pracownika"
+        android:text="@string/addWorker"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
@@ -19,14 +19,14 @@
         app:layout_constraintVertical_bias="0.211" />
 
     <Button
-        android:id="@+id/button_workerPermission"
+        android:id="@+id/buttonWorkerPermission"
         android:layout_width="208dp"
         android:layout_height="64dp"
-        android:text="Uprawnienia"
+        android:text="@string/permission"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_dodajprac"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAddWorker"
         app:layout_constraintVertical_bias="0.129" />
 </androidx.constraintlayout.widget.ConstraintLayout>

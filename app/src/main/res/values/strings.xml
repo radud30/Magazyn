@@ -1,5 +1,49 @@
 <resources>
     <string name="app_name">Magazyn</string>
+    <string name="productName">Nazwa produktu</string>
+    <string name="addProduct">Dodaj produkt</string>
+    <string name="quantity">Ilość</string>
+    <string name="productBarcode">Kod produktu</string>
+    <string name="quantityColon">Ilość:</string>
+    <string name="location">Lokalizacja</string>
+    <string name="addPhoto">Dodaj zdjęcie:</string>
+    <string name="one">1</string>
+    <string name="email">Email</string>
+    <string name="password">Hasło</string>
+    <string name="repeatPassword">Powtórz hasło</string>
+    <string name="registerWorker">Zarejestruj pracownika</string>
+    <string name="permissionsColon">Uprawnienia:</string>
+    <string name="latterCanChange">(Później można zmienić)</string>
+    <string name="enterEmail">Wprowadź swój email</string>
+    <string name="resetPassword">Zresetuj hasło</string>
+    <string name="logout">Wyloguj się</string>
+    <string name="addProductToStock">Dodaj na stan</string>
+    <string name="CheckStock">Sprawdz stan</string>
+    <string name="collectStock">Zdjęcie ze stanu</string>
+    <string name="worker">Pracownik</string>
+    <string name="registerActivity">Rejestr aktywności</string>
+    <string name="workerActivity">Aktywność pracownika:</string>
+    <string name="register">Rejestracja</string>
+    <string name="login">Zaloguj</string>
+    <string name="remindPassword">Przypomnij hasło</string>
+    <string name="workerColon">Pracownik:</string>
+    <string name="textView">TextView</string>
+    <string name="addProductsColon">Dodawanie produktów:</string>
+    <string name="stockStatusColon">Stan produktów:</string>
+    <string name="collectProductsColon">Zbieranie produktów:</string>
+    <string name="change">Zmień</string>
+    <string name="locationColon">Lokalizacja:</string>
+    <string name="updateProduct">Uaktualnij produkt</string>
+    <string name="deleteProduct">Usuń produkt</string>
+    <string name="photo">Zdjęcie</string>
+    <string name="name">Imię</string>
+    <string name="age">Wiek</string>
+    <string name="registerAcc">Zarejestruj</string>
+    <string name="searchProduct">Wyszukaj produkt</string>
+    <string name="addWorker">Dodaj pracownika</string>
+    <string name="permission">Uprawnienia</string>
+    <string name="codeColon">Kod:</string>
+
 
     <string-array name="spinerPermissions">
         <item>Brak</item>

@@ -7,12 +7,12 @@
     tools:context=".AddWorkerActivity">
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress_mailprac"
+        android:id="@+id/editTextTextEmailAddressWorkerEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:hint="Email"
+        android:hint="@string/email"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -21,42 +21,42 @@
         app:layout_constraintVertical_bias="0.206" />
 
     <EditText
-        android:id="@+id/editTextTextPassword_haslo"
+        android:id="@+id/editTextTextPasswordWorkerPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword"
-        android:hint="Hasło"
+        android:hint="@string/password"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress_mailprac"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddressWorkerEmail"
         app:layout_constraintVertical_bias="0.098" />
 
     <EditText
-        android:id="@+id/editTextTextPassword_powhaslo"
+        android:id="@+id/editTextTextPasswordReWorkerPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Powtórz hasło"
+        android:hint="@string/repeatPassword"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword_haslo"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordWorkerPass"
         app:layout_constraintVertical_bias="0.155" />
 
     <Button
-        android:id="@+id/button_zarejestrujPracownika"
+        android:id="@+id/buttonRegWorker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Zarejestruj pracownika"
+        android:text="@string/registerWorker"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword_powhaslo" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordReWorkerPass" />
 
     <ProgressBar
         android:id="@+id/progressBar4"
@@ -64,11 +64,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/button_zarejestrujPracownika"
+        app:layout_constraintBottom_toTopOf="@+id/buttonRegWorker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword_powhaslo"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordReWorkerPass"
         app:layout_constraintVertical_bias="0.57" />
 
     <Spinner
@@ -79,27 +79,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.792"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword_powhaslo"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordReWorkerPass"
         app:layout_constraintVertical_bias="0.134" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Uprawnienia:"
+        android:text="@string/permissionsColon"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/spinnerPermission"
         app:layout_constraintHorizontal_bias="0.673"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword_powhaslo"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordReWorkerPass"
         app:layout_constraintVertical_bias="0.153" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(Później można zmienić)"
+        android:text="@string/latterCanChange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.062"

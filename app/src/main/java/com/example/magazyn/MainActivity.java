@@ -43,32 +43,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textViewRegister = (TextView) findViewById(R.id.textView_rej);
+        textViewRegister = (TextView) findViewById(R.id.textViewReg);
         textViewRegister.setOnClickListener(this);
 
-        buttonLogin = (Button) findViewById(R.id.button_login);
+        buttonLogin = (Button) findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
 
-        editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddress2_mail);
-        editTextPassword = (EditText) findViewById(R.id.editTextTextPassword2_pass);
+        editTextEmail = (EditText) findViewById(R.id.editTextTextEmailAddressEmail);
+        editTextPassword = (EditText) findViewById(R.id.editTextTextPasswordPass);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         mAuth = FirebaseAuth.getInstance();
 
-        textViewForgotPassword = (TextView) findViewById(R.id.textView_forgotpass);
+        textViewForgotPassword = (TextView) findViewById(R.id.textViewForgotpass);
         textViewForgotPassword.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.textView_rej:
+            case R.id.textViewReg:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(this, RegisterUserActivity.class));
                 break;
-            case R.id.button_login:
+            case R.id.buttonLogin:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 try {
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     System.exit(0);
                 }
                 break;
-            case R.id.textView_forgotpass:
+            case R.id.textViewForgotpass:
                 if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(this, ForgotPasswordActivity.class));
