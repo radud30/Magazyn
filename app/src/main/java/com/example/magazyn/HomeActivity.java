@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         permissionStockStatusExtra = getIntent().getStringExtra("EXTRA_PERMISSION_STOCK_FB");
         permissionCollectExtra = getIntent().getStringExtra("EXTRA_PERMISSION_COLLECT_FB");
         permissionLocationExtra = getIntent().getStringExtra("EXTRA_PERMISSION_LOCATION_FB");
-        Log.d("MyTag", permissionLocationExtra +"");
+        //Log.d("MyTag", permissionLocationExtra +"");
 
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(this);
