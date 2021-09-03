@@ -8,7 +8,7 @@ Aplikacja mobilna ze zdalną bazą danych do zarządzania powierzchnią magazyno
 * [Screenshots](#screenshots)
 
 ## General Information
-
+Control and manage your products in the warehouse, store or have everything organized in your home. 
 
 ## Technologies Used
 
