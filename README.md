@@ -8,7 +8,7 @@ Aplikacja mobilna ze zdalną bazą danych do zarządzania powierzchnią magazyno
 * [Screenshots](#screenshots)
 
 ## General Information
-Control and manage your products in the warehouse, store or have everything organized in your home. Create employee accounts and control the activities in the warehouse. 
+Multifunction barcode scanner on your phone. Control and manage your products in the warehouse, store or have everything organized in your home. Create employee accounts and control the activities in the warehouse.
 
 ## Languages and Tools
 * Java
@@ -18,7 +18,11 @@ Control and manage your products in the warehouse, store or have everything orga
 * ZXing
 
 ## Features
-
+* Product management (Adding, editing, deleting, collecting) 
+* Adding a product picture
+* Checking products in stock 
+* Product Search
+* Barcode scanning 
 
 ## Screenshots
 
