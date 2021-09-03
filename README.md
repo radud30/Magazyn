@@ -15,6 +15,8 @@ Control and manage your products in the warehouse, store or have everything orga
 * Android Studio
 * Firebase
 * Firebase Realtime Database
+* ZXing
+
 ## Features
 
 
