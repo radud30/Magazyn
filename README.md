@@ -18,11 +18,16 @@ Multifunction barcode scanner on your phone. Control and manage your products in
 * ZXing
 
 ## Features
+* Login and registration system 
 * Product management (Adding, editing, deleting, collecting) 
 * Adding a product picture
 * Checking products in stock 
 * Product Search
 * Barcode scanning 
+* Visualize the layout of shelves in a warehouse
+* Activity log 
+* Creating an employee account
+* Employee Account Management
 
 ## Screenshots
 
