@@ -30,5 +30,8 @@ Multifunction barcode scanner on your phone. Control and manage your products in
 * Employee Account Management
 
 ## Screenshots
+![SS1](./img/appscreens.png)
+![SS2](./img/scrensss.png)
+![GIF](./img/scanninggif.gif)
 
 
