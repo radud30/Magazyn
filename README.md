@@ -5,7 +5,7 @@ Aplikacja mobilna ze zdalną bazą danych do zarządzania powierzchnią magazyno
 * [General Info](#general-information)
 * [Languages and Tools](#languages-and-tools)
 * [Features](#features)
-* [Screenshots](#screenshots)
+* [Sample screenshots](#sample-screenshots)
 
 ## General Information
 Multifunction barcode scanner on your phone. Control and manage your products in the warehouse, store or have everything organized in your home. Create employee accounts and control the activities in the warehouse.
@@ -29,7 +29,7 @@ Multifunction barcode scanner on your phone. Control and manage your products in
 * Creating an employee account
 * Employee Account Management
 
-## Screenshots
+## Sample screenshots
 ![SS1](./img/appscreens.png)
 ![SS2](./img/scrensss.png)
 
